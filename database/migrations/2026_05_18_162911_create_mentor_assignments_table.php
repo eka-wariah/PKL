@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('mentor_assignments', function (Blueprint $table) {
+            $table->bigIncrements('mas_id');
+            $table->unsignedBigInteger('mas_student_nis');
+            $table->foreign('mas_student_nis')->references('std_id')->on('students')->onDelete('cascade');
+            $table->unsignedBigInteger('mas_mentor_gtk');
+            $table->foreign('mas_mentor_gtk')->references('mtr_id')->on('mentors')->onDelete('cascade');
+            $table->unsignedBigInteger('mas_academic_id');
+            $table->foreign('mas_academic_id')->references('acy_id')->on('academic_years')->onDelete('cascade');
+            $table->timestamps();
+            $table->renameColumn('updated_at', 'mtr_updated_at');
+            $table->renameColumn('created_at', 'mtr_created_at');
+            $table->unsignedBigInteger('mtr_created_by')->nullable();
+            $table->unsignedBigInteger('mtr_deleted_by')->nullable();
+            $table->unsignedBigInteger('mtr_updated_by')->nullable();
+            $table->softDeletes(); // gunakan deleted_at
+            $table->renameColumn('deleted_at', 'mtr_deleted_at');
+            $table->string('mtr_sys_note')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('mentor_assignments');
+    }
+};
