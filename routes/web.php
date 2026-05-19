@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Komite\DashboardController;
+use App\Http\Controllers\comitte\DashboardController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('komite')->name('komite.')->group(function () {
+Route::prefix('comitte')->name('comitte.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
 });
 

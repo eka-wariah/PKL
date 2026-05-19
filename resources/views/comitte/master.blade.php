@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical">
 
 <!-- head -->
-@include('komite.head')
+@include('comitte.head')
 <!-- endhead -->
 <body>
   <div class="toast toast-onload align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -21,18 +21,18 @@
   </div> --}}
   <div id="main-wrapper">
     <!-- Sidebar Start -->
-    @include('komite.sidebar')
+    @include('comitte.sidebar')
     <!--  Sidebar End -->
     <div class="page-wrapper">
       <!--  Header Start -->
-      @include('komite.navbar')
+      @include('comitte.navbar')
       <!--  Header End -->
 
       <aside class="left-sidebar with-horizontal">
         <!-- Sidebar scroll-->
         <div>
           <!-- Sidebar navigation-->
-          @include('komite.sidenav')
+          @include('comitte.sidenav')
           <!-- End Sidebar navigation -->
         </div>
         <!-- End Sidebar scroll-->
@@ -385,7 +385,7 @@
   @include('sweetalert::alert')
 
 
-  @include('komite.script')
+  @include('comitte.script')
 
 
   {{-- endscript --}}

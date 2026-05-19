@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Komite;
+namespace App\Http\Controllers\comitte;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('komite.dashboard');
+        return view('comitte.dashboard');
     }
 
     /**
