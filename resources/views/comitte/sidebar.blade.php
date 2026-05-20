@@ -25,7 +25,7 @@
           <!-- Dashboard -->
           <!-- ---------------------------------- -->
           <li class="sidebar-item">
-            <a class="sidebar-link" href="/administration/"  aria-expanded="false">
+            <a class="sidebar-link" href="/comitte/"  aria-expanded="false">
               <span>
                 <i class="ti ti-aperture"></i>
               </span>
@@ -36,6 +36,24 @@
           <!-- akademik -->
           <!-- ---------------------------------- -->
          
+
+
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span class="hide-menu">Data Pengguna</span>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="/comitte/teacher/"  aria-expanded="false">
+              <span>
+                <i class="ti ti-aperture"></i>
+              </span>
+              <span class="hide-menu">Data Guru</span>
+            </a>
+          </li>
+
+
+
       </nav>
 
       <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
