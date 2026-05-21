@@ -35,6 +35,9 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::put('/{id}/edit-password', [TeacherController::class, 'updatePassword'])->name('editPassword');
         Route::delete('/{id}/destroy', [TeacherController::class, 'destroy'])->name('destroy');
 
+        Route::get('/{id}/mentee', [TeacherController::class, 'mentee'])->name('mentee');
+
+
 
 
 

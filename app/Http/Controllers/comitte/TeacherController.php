@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Mentor;
+use App\Models\MentorAssignments;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -119,13 +120,28 @@ class TeacherController extends Controller
             ->with('success', 'Password guru berhasil diubah.');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $mentor = User::findOrFail($id);
 
         $mentor->delete();
         Alert::success('Berhasil Menghapus', 'Password berhasil Dihapus');
         return redirect()->route('comitte.teacher.index')
             ->with('success', 'Data BErhasil Dihapus.');
+    }
 
+    public function mentee($id)
+    {
+        $mentor = Mentor::with('user')->where('mtr_usr_id',$id)->first();
+        // dd($mentor->user);
+        $students = MentorAssignments::with([
+            'student.user',
+            'student.class',
+        ])
+            ->where('mas_mentor_id', $mentor->mtr_id)
+            ->get();
+            // dd($students);
+
+        return view('comitte.teacher.mentee', compact('mentor', 'students'));
     }
 }

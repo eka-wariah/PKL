@@ -6,7 +6,7 @@
 @endpush
 
 @section('title')
-    SiMAPUT | Daftar Guru
+    SiMAPUT | Siswa Bimbingan
 @endsection
 
 @section('content')
@@ -18,10 +18,10 @@
                         <h4 class="fw-semibold mb-8">GURU</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item" aria-current="page">Daftar Guru</li>
                                 <li class="breadcrumb-item">
-                                
+                                    <a href="/comitte/mentor">Daftar Guru</a>
                                 </li>
+                                <li class="breadcrumb-item active" aria-current="page">Siswa Bimbingan</li>
                             </ol>
                         </nav>
                     </div>
@@ -37,50 +37,56 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="mb-5 position-relative">
-                    <h4 class="card-title mb-0">Daftar Guru</h4>
-                    <a href="/comitte/teacher/create" class="btn btn-primary position-absolute top-0 end-0">Tambah
-                        Guru</a>
+                <div class="mb-4 d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">
+                        Siswa Bimbingan — {{ $mentor->user->name }}
+                    </h4>
+                    <div class="d-flex gap-2">
+                        <a href="/comitte/mentor/{{ $mentor->mtr_id }}/students/create" class="btn btn-primary">
+                            <i class="ti ti-plus me-1"></i> Tambah
+                        </a>
+                        <a href="/comitte/mentor" class="btn btn-secondary">
+                            <i class="ti ti-arrow-left me-1"></i> Kembali
+                        </a>
+                    </div>
                 </div>
+
                 <div class="table-responsive">
                     <table id="file_export" class="table w-100 table-striped table-bordered display text-nowrap">
                         <thead>
                             <tr>
-                                <th width="10%">No</th>
-                                <th>No.gtk</th>
-                                <th>Nama</th>
-                                <th>Email</th>
+                                <th width="5%">No</th>
+                                <th>NIS</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($mentor as $key => $item)
+                            @forelse ($students as $item)
                                 <tr>
-                                    <td>{{ $loop->iteration ?? '-' }}</td>
-                                    <td>{{ $item->mentor->mtr_gtk ?? '-' }}</td>
-                                    <td>{{ $item->name ?? '-'}}</td>
-                                    <td>{{ $item->email ?? '-' }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->student->std_nis ?? '-' }}</td>
+                                    <td>{{ $item->student->user->name ?? '-' }}</td>
+                                    <td>{{ $item->student->class->cls_name ?? '-' }}</td>
                                     <td>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/mentee" class="btn btn-info"><i class="ti ti-user"></i></a>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/edit" class="btn btn-primary"><i class="ti ti-edit"></i></a>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/edit-password" class="btn btn-success"><i class="ti ti-key"></i></a>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/destroy" class="btn btn-danger" data-confirm-delete="true"><i class="ti ti-trash"></i></a>
-
-
+                                        <a href="" class="btn btn-sm btn-info">
+                                            <i class="ti ti-user"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center">Tidak ada data mentor.</td>
+                                    <td colspan="5" class="text-center">Tidak ada siswa bimbingan.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th width="10%">No</th>
-                                <th>No.gtk</th>
-                                <th>Nama Guru</th>
-                                <th>Email</th>
+                                <th width="5%">No</th>
+                                <th>NIS</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
                                 <th>Aksi</th>
                             </tr>
                         </tfoot>

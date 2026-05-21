@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('mentor_assignments', function (Blueprint $table) {
             $table->bigIncrements('mas_id');
-            $table->unsignedBigInteger('mas_student_nis');
-            $table->foreign('mas_student_nis')->references('std_id')->on('students')->onDelete('cascade');
-            $table->unsignedBigInteger('mas_mentor_gtk');
-            $table->foreign('mas_mentor_gtk')->references('mtr_id')->on('mentors')->onDelete('cascade');
+            $table->unsignedBigInteger('mas_student_id');
+            $table->foreign('mas_student_id')->references('std_id')->on('students')->onDelete('cascade');
+            $table->unsignedBigInteger('mas_mentor_id');
+            $table->foreign('mas_mentor_id')->references('mtr_id')->on('mentors')->onDelete('cascade');
             $table->unsignedBigInteger('mas_academic_id');
             $table->foreign('mas_academic_id')->references('acy_id')->on('academic_years')->onDelete('cascade');
             $table->timestamps();
