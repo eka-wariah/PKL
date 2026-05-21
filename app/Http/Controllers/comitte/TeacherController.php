@@ -18,6 +18,9 @@ class TeacherController extends Controller
         $mentor = User::Role('mentor')->get();
         // $check = Mentor::all();
         // dd($check);
+        $title = 'Hapus Data Guru!';
+        $text = "Apakah Anda yakin ingin menghapus?";
+        confirmDelete($title, $text);
 
 
         return view('comitte.teacher.index', compact(['mentor']));
@@ -89,5 +92,40 @@ class TeacherController extends Controller
 
         return redirect()->route('comitte.teacher.index')
             ->with('success', 'Data guru berhasil diperbarui.');
+    }
+
+    public function editPassword($id)
+    {
+        $mentor = User::findOrFail($id);
+        // dd($mentor);
+        return view('comitte.teacher.edit-password', compact(['mentor']));
+    }
+
+    public function updatePassword($id, Request $request)
+    {
+        $mentor = User::findOrFail($id);
+
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $mentor->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        Alert::success('Berhasil Megubah', 'Password berhasil diperbarui');
+
+        return redirect()->route('comitte.teacher.index')
+            ->with('success', 'Password guru berhasil diubah.');
+    }
+
+    public function destroy($id){
+        $mentor = User::findOrFail($id);
+
+        $mentor->delete();
+        Alert::success('Berhasil Menghapus', 'Password berhasil Dihapus');
+        return redirect()->route('comitte.teacher.index')
+            ->with('success', 'Data BErhasil Dihapus.');
+
     }
 }

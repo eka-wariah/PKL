@@ -63,8 +63,8 @@
                                     <td>
                                         <a href="" class="btn btn-info"><i class="ti ti-user"></i></a>
                                         <a href="/comitte/teacher/{{$item->usr_id}}/edit" class="btn btn-primary"><i class="ti ti-edit"></i></a>
-                                        <a href="" class="btn btn-success"><i class="ti ti-key"></i></a>
-                                        <a href="" class="btn btn-danger"><i class="ti ti-trash"></i></a>
+                                        <a href="/comitte/teacher/{{$item->usr_id}}/edit-password" class="btn btn-success"><i class="ti ti-key"></i></a>
+                                        <a href="/comitte/teacher/{{$item->usr_id}}/destroy" class="btn btn-danger" data-confirm-delete="true"><i class="ti ti-trash"></i></a>
 
 
                                     </td>

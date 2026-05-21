@@ -31,6 +31,12 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::post('/create', [TeacherController::class, 'store'])->name('store');
         Route::get('/{id}/edit', [TeacherController::class, 'edit'])->name('edit');
         Route::put('/{id}/edit', [TeacherController::class, 'update'])->name('update');
+        Route::get('/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('editPassword');
+        Route::put('/{id}/edit-password', [TeacherController::class, 'updatePassword'])->name('editPassword');
+        Route::delete('/{id}/destroy', [TeacherController::class, 'destroy'])->name('destroy');
+
+
+
 
 
 
