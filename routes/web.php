@@ -26,6 +26,7 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
 
 
     Route::prefix('teacher')->name('teacher.')->group(function () {
+        Route::get('/template', [TeacherController::class, 'downloadTemplate'])->name('template');
         Route::get('/', [TeacherController::class, 'index'])->name('index');
         Route::get('/create', [TeacherController::class, 'create'])->name('create');
         Route::post('/create', [TeacherController::class, 'store'])->name('store');
@@ -37,6 +38,10 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::get('/{id}/mentee', [TeacherController::class, 'mentee'])->name('mentee');
         Route::get('/{id}/mentee/create', [TeacherController::class, 'createMentee'])->name('mentee.create');
         Route::post('/{id}/mentee/create', [TeacherController::class, 'storeMentee'])->name('mentee.store');
+        Route::get('/import', [TeacherController::class, 'importPage'])->name('importPage');
+        Route::post('/import', [TeacherController::class, 'import'])->name('import');
+        Route::resource('/', TeacherController::class);
+
 
 
 

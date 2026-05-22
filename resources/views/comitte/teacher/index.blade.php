@@ -20,7 +20,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item" aria-current="page">Daftar Guru</li>
                                 <li class="breadcrumb-item">
-                                
+
                                 </li>
                             </ol>
                         </nav>
@@ -37,11 +37,19 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="mb-5 position-relative">
+                <div class="mb-4 d-flex justify-content-between align-items-center">
                     <h4 class="card-title mb-0">Daftar Guru</h4>
-                    <a href="/comitte/teacher/create" class="btn btn-primary position-absolute top-0 end-0">Tambah
-                        Guru</a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('comitte.teacher.importPage') }}" class="btn btn-success">
+                            <i class="ti ti-file-import me-1"></i> Import Guru
+                        </a>
+                        <a href="{{ route('comitte.teacher.create') }}" class="btn btn-primary">
+                            <i class="ti ti-plus me-1"></i> Tambah Guru
+                        </a>
+                    </div>
                 </div>
+
+
                 <div class="table-responsive">
                     <table id="file_export" class="table w-100 table-striped table-bordered display text-nowrap">
                         <thead>
@@ -58,13 +66,17 @@
                                 <tr>
                                     <td>{{ $loop->iteration ?? '-' }}</td>
                                     <td>{{ $item->mentor->mtr_gtk ?? '-' }}</td>
-                                    <td>{{ $item->name ?? '-'}}</td>
+                                    <td>{{ $item->name ?? '-' }}</td>
                                     <td>{{ $item->email ?? '-' }}</td>
                                     <td>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/mentee" class="btn btn-info"><i class="ti ti-user"></i></a>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/edit" class="btn btn-primary"><i class="ti ti-edit"></i></a>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/edit-password" class="btn btn-success"><i class="ti ti-key"></i></a>
-                                        <a href="/comitte/teacher/{{$item->usr_id}}/destroy" class="btn btn-danger" data-confirm-delete="true"><i class="ti ti-trash"></i></a>
+                                        <a href="/comitte/teacher/{{ $item->usr_id }}/mentee" class="btn btn-info"><i
+                                                class="ti ti-user"></i></a>
+                                        <a href="/comitte/teacher/{{ $item->usr_id }}/edit" class="btn btn-primary"><i
+                                                class="ti ti-edit"></i></a>
+                                        <a href="/comitte/teacher/{{ $item->usr_id }}/edit-password"
+                                            class="btn btn-success"><i class="ti ti-key"></i></a>
+                                        <a href="/comitte/teacher/{{ $item->usr_id }}/destroy" class="btn btn-danger"
+                                            data-confirm-delete="true"><i class="ti ti-trash"></i></a>
 
 
                                     </td>
