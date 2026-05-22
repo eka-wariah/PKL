@@ -35,6 +35,21 @@
           <!-- ---------------------------------- -->
           <!-- akademik -->
           <!-- ---------------------------------- -->
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span class="hide-menu">Siswa</span>
+          </li>
+          <!-- ---------------------------------- -->
+          <!-- Dashboard -->
+          <!-- ---------------------------------- -->
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="/comitte/student/"  aria-expanded="false">
+              <span>
+                <i class="ti ti-user"></i>
+              </span>
+              <span class="hide-menu">Data Siswa</span>
+            </a>
+          </li>
          
       </nav>
 
