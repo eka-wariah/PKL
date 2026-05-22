@@ -34,8 +34,11 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::get('/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('editPassword');
         Route::put('/{id}/edit-password', [TeacherController::class, 'updatePassword'])->name('editPassword');
         Route::delete('/{id}/destroy', [TeacherController::class, 'destroy'])->name('destroy');
-
         Route::get('/{id}/mentee', [TeacherController::class, 'mentee'])->name('mentee');
+        Route::get('/{id}/mentee/create', [TeacherController::class, 'createMentee'])->name('mentee.create');
+        Route::post('/{id}/mentee/create', [TeacherController::class, 'storeMentee'])->name('mentee.store');
+
+
 
 
 

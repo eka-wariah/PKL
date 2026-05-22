@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Mentor;
+use App\Models\Student;
+
 use App\Models\MentorAssignments;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -144,4 +146,40 @@ class TeacherController extends Controller
 
         return view('comitte.teacher.mentee', compact('mentor', 'students'));
     }
+    public function createMentee($mentorId)
+{
+    $mentor = Mentor::with('user')->findOrFail($mentorId);
+
+    // ambil siswa yang belum punya mentor assignment
+    $students = Student::with('user')
+        ->whereDoesntHave('mentorAssignment')
+        ->get();
+
+    return view('comitte.teacher.mentee-create', compact('mentor', 'students'));
+}
+
+public function storeMentee(Request $request, $mentorId)
+{
+    $request->validate([
+        'students'   => 'required|array|min:1',
+        'students.*' => 'exists:students,std_id',
+    ]);
+
+    $mentor = Mentor::findOrFail($mentorId);
+
+    DB::transaction(function () use ($request, $mentor) {
+        foreach ($request->students as $studentId) {
+            MentorAssignments::create([
+                'mas_student_id'  => $studentId,
+                'mas_mentor_id'   => $mentor->mtr_id,
+                'mas_academic_id'  => 1, // sesuaikan dengan academic year aktif
+                // 'mtr_created_by'   => auth()->id(),
+            ]);
+        }
+    });
+    Alert::success('Berhasil Menambah', 'Siswa Bimbingna telah di tambahkan');
+
+    return redirect()->route('comitte.teacher.mentee', $mentor->mtr_id)
+        ->with('success', 'Siswa bimbingan berhasil ditambahkan.');
+}
 }

@@ -23,4 +23,8 @@ class Student extends Model
     {
         return $this->belongsTo(Classes::class, 'std_classes_id', 'cls_id');
     }
+     public function mentorAssignment()
+    {
+        return $this->hasOne(mentorAssignments::class, 'mas_student_id', 'std_id');
+    }
 }

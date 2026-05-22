@@ -22,9 +22,9 @@ return new class extends Migration
             $table->timestamps();
             $table->renameColumn('updated_at', 'mtr_updated_at');
             $table->renameColumn('created_at', 'mtr_created_at');
-            $table->unsignedBigInteger('mtr_created_by')->nullable();
-            $table->unsignedBigInteger('mtr_deleted_by')->nullable();
-            $table->unsignedBigInteger('mtr_updated_by')->nullable();
+            $table->unsignedBigInteger('mas_created_by')->nullable();
+            $table->unsignedBigInteger('mas_deleted_by')->nullable();
+            $table->unsignedBigInteger('mas_updated_by')->nullable();
             $table->softDeletes(); // gunakan deleted_at
             $table->renameColumn('deleted_at', 'mtr_deleted_at');
             $table->string('mtr_sys_note')->nullable();
