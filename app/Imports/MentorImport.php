@@ -15,6 +15,20 @@ class MentorImport implements ToCollection, WithHeadingRow
     {
         DB::transaction(function () use ($rows) {
             foreach ($rows as $row) {
+                if (empty($row['nama']) || empty($row['email'])) {
+                    continue;
+                }
+
+                // skip kalau email sudah ada
+                if (User::where('email', $row['email'])->exists()) {
+                    continue;
+                }
+
+                // skip kalau no_gtk sudah ada
+                if (Mentor::where('mtr_gtk', (string) $row['no_gtk'])->exists()) {
+                    continue;
+                }
+
                 $user = User::create([
                     'name'     => $row['nama'],
                     'email'    => $row['email'],
@@ -25,8 +39,8 @@ class MentorImport implements ToCollection, WithHeadingRow
 
                 Mentor::create([
                     'mtr_usr_id'     => $user->usr_id,
-                    'mtr_gtk'        => $row['no_gtk'],
-                    'mtr_created_by' => auth()->id(),
+                    'mtr_gtk'        => (string) $row['no_gtk'],
+                    // 'mtr_created_by' => auth()->id(),
                 ]);
             }
         });

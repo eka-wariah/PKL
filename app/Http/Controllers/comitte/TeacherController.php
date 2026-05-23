@@ -202,8 +202,8 @@ class TeacherController extends Controller
         ]);
 
         Excel::import(new MentorImport, $request->file('file'));
-
-        return redirect()->route('mentor.index')
+        Alert::success('Berhasil Import', 'Data Guru Berhasil Diimport');
+        return redirect()->route('comitte.teacher.index')
             ->with('success', 'Data guru berhasil diimport.');
     }
 }
