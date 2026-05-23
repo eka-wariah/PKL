@@ -3,6 +3,8 @@
 use App\Http\Controllers\comitte\DashboardController;
 use App\Http\Controllers\comitte\TeacherController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\GuidanceController ;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +62,23 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
 
 Route::prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/', [MentorDashboardController::class, 'index'])->name('index');
+    Route::prefix('guidance')->name('guidance.')->group(function () {
+        
+        Route::get('/', [GuidanceController::class, 'index'])->name('index');
+        
+
+
+
+
+
+
+
+
+
+
+
+       
+    });
 
 });
 

@@ -82,7 +82,7 @@
                                 <th>Nama Siswa</th>
                                 <th>Kelas</th>
                                 <th>Kehadiran Hari Ini</th>
-                                <th>Aksi</th>
+                              
                             </tr>
                         </thead>
                         <tbody>
@@ -94,11 +94,7 @@
                                 <td>
                                     <span class="badge bg-success">Hadir</span>
                                 </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info">
-                                        <i class="ti ti-user"></i>
-                                    </a>
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td>2</td>
@@ -108,11 +104,7 @@
                                 <td>
                                     <span class="badge bg-danger">Tidak Hadir</span>
                                 </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info">
-                                        <i class="ti ti-user"></i>
-                                    </a>
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td>3</td>
@@ -122,11 +114,7 @@
                                 <td>
                                     <span class="badge bg-warning text-dark">Izin</span>
                                 </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info">
-                                        <i class="ti ti-user"></i>
-                                    </a>
-                                </td>
+                               
                             </tr>
                             <tr>
                                 <td>4</td>
@@ -136,11 +124,7 @@
                                 <td>
                                     <span class="badge bg-info">Sakit</span>
                                 </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info">
-                                        <i class="ti ti-user"></i>
-                                    </a>
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td>5</td>
@@ -150,11 +134,7 @@
                                 <td>
                                     <span class="badge bg-success">Hadir</span>
                                 </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info">
-                                        <i class="ti ti-user"></i>
-                                    </a>
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td>6</td>
@@ -164,11 +144,7 @@
                                 <td>
                                     <span class="badge bg-secondary">Belum Tercatat</span>
                                 </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info">
-                                        <i class="ti ti-user"></i>
-                                    </a>
-                                </td>
+                               
                             </tr>
                         </tbody>
                         <tfoot>
@@ -178,7 +154,7 @@
                                 <th>Nama Siswa</th>
                                 <th>Kelas</th>
                                 <th>Kehadiran Hari Ini</th>
-                                <th>Aksi</th>
+                            
                             </tr>
                         </tfoot>
                     </table>

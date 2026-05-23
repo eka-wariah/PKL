@@ -13,22 +13,23 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->bigIncrements('news_id');
-            $table->unsignedBigInteger('news_student_nis');
-            $table->foreign('news_student_nis')->references('std_id')->on('students')->onDelete('cascade');
             $table->unsignedBigInteger('news_mentor_id');
             $table->foreign('news_mentor_id')->references('mtr_id')->on('mentors')->onDelete('cascade');
             $table->unsignedBigInteger('news_academic_year');
             $table->foreign('news_academic_year')->references('acy_id')->on('academic_years')->onDelete('cascade');
             $table->date('news_date')->nullable();
             $table->time('news_start')->nullable();
-            $table->date('news_ended')->nullable();
+            $table->time('news_ended')->nullable();
             $table->string('news_document_number')->nullable();
             $table->string('news_week_number')->nullable();
-            $table->string('news_guidance_material')->nullable();
-            $table->string('news_note')->nullable();
-            $table->string('news_problem')->nullable();
+            $table->longText('news_guidance_material')->nullable();
+            $table->longText('news_note')->nullable();
+            $table->longText('news_problem')->nullable();
             $table->string('news_image')->nullable();
-            $table->bigInteger('news_status')->nullable();
+            // $table->bigInteger('news_status')->nullable();
+            $table->unsignedBigInteger('news_parent_id')->nullable();
+            $table->foreign('news_parent_id')->references('news_id')->on('news')->onDelete('cascade');
+
             $table->timestamps();
             $table->renameColumn('updated_at', 'news_updated_at');
             $table->renameColumn('created_at', 'news_created_at');
