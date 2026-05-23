@@ -6,7 +6,7 @@
 @endpush
 
 @section('title')
-    E-PKL | Daftar List Siswa
+    SITAW | Daftar Perusahaan
 @endsection
 
 @section('content')
@@ -15,10 +15,10 @@
             <div class="card-body px-4 py-3">
               <div class="row align-items-center">
                 <div class="col-9">
-                  <h4 class="fw-semibold mb-8">LIST SISWA</h4>
+                  <h4 class="fw-semibold mb-8">PERUSAHAAN</h4>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                    <li class="breadcrumb-item" aria-current="page">Daftar List Siswa</li>
+                    <li class="breadcrumb-item" aria-current="page">Daftar Perusahaan</li>
                     
                       
                     </ol>
@@ -37,8 +37,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-5 position-relative">
-                    <h4 class="card-title mb-0">Daftar Siswa</h4>
-                    <a href="/comitte/student/create" class="btn btn-primary position-absolute top-0 end-0">Tambah Data Siswa</a>
+                    <h4 class="card-title mb-0">Daftar Perusahaan</h4>
+                    <a href="/comitte/company/create" class="btn btn-primary position-absolute top-0 end-0">Tambah Perusahaan</a>
                 </div>
                 <p class="card-subtitle mb-3">
                     
@@ -49,9 +49,8 @@
                             <!-- start row -->
                             <tr>
                                 <th width="10%">No</th>
-                                <th>NIS</th>
-                                <th>Nama Siswa</th>
-                                <th>Kelas</th>
+                                <th>Nama Perusahaan</th>
+                                <th>Singkatan</th>
                                 <th>Aksi</th>
                                 
                             </tr>
@@ -59,23 +58,15 @@
                         </thead>
                         <tbody>
                           <!-- start row -->
-                          @foreach ( $student as $no=> $std)
+                          @foreach ( $company as $no=> $cmp)
                           <tr>
                               
                               <td>{{$no+1}}</td>
-                              <td>{{ $std->student->std_nis ?? '-'}}</td>
-                              <td>{{ $std->name}}</td>
-                              <td>{{ $std->student->classes->cls_level ?? '-' }} {{ $std->student->classes->cls_major->mjr_abbr ?? '-' }}  {{ $std->student->classes->cls_number ?? '-' }}</td>
-{{--                       
-                              <td>{{ $std->student->std_mentor?? '-'}}</td> --}}
-                              
+                              <td>{{ $cmp->cmp_name}}</td>
+                              <td>{{ $cmp->cmp_adress}}</td>
                               <td>
-                                   <a href="/comitte/student/{{ $std->usr_id}}/edit"  class="btn btn-primary"><i class="ti ti-edit"></i></a>
-                                   <a href="/comitte/student/{{ $std->usr_id}}/destroy" class="btn btn-danger" data-confirm-delete="true"><i class="ti ti-trash"></i></a>
-                                   <a href="{{ route('comitte.student.detail', $std->usr_id) }}" 
-                                    class="btn btn-info">
-                                    <i class="ti ti-eye"></i>
-                                 </a>
+                                   <a href="/comitte/company/{{ $cmp->cmp_id}}/edit" class="btn btn-primary">Edit</a>
+                                   <a href="/comitte/company/{{ $cmp->cmp_id}}/destroy" class="btn btn-danger" data-confirm-delete="true">Delete</a>
 
                               </td>
 
@@ -91,11 +82,10 @@
                             
 
                             <tr>
-                                <th width="10%">No</th>
-                                <th>NIS</th>
-                                <th>Nama Siswa</th>
-                                <th>Kelas</th>
-                                <th>Aksi</th>
+                              <th width="10%">No</th>
+                              <th>Nama Perusahaan</th>
+                              <th>Singkatan</th>
+                              <th>Aksi</th>
                             </tr>
                             <!-- end row -->
                         </tfoot>

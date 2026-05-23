@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\comitte\AcademicYearController;
 use App\Http\Controllers\comitte\ClassesController;
+use App\Http\Controllers\comitte\CompanyController;
 use App\Http\Controllers\comitte\DashboardController;
 use App\Http\Controllers\comitte\MajorController;
 use App\Http\Controllers\comitte\StudentController;
@@ -33,6 +34,7 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::post('/create', [StudentController::class, 'store'])->name('store');
         Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('edit');
         Route::post('/{id}/edit', [StudentController::class, 'update'])->name('update');
+        Route::get('/{id}/detail', [StudentController::class, 'show'])->name('detail');
         Route::delete('/{id}/destroy', [StudentController::class, 'destroy'])->name('destroy');
     });
     Route::prefix('academic-years')->name('academic_years.')->group(function () {
@@ -59,6 +61,23 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::get('/{id}/edit', [ClassesController::class, 'edit'])->name('classes.edit');
         Route::post('/{id}/edit', [ClassesController::class, 'update'])->name('classes.update');
         Route::delete('/{id}/destroy', [ClassesController::class, 'destroy'])->name('classes.destroy');
+    });
+    // Route::prefix('student')->name('student.')->group(function () {
+    //     Route::get('/', [StudentController::class, 'index'])->name('index');
+    //     Route::get('/create', [StudentController::class, 'create'])->name('create');
+    //     Route::post('/create', [StudentController::class, 'store'])->name('store');
+    //     Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('edit');
+    //     Route::post('/{id}/edit', [StudentController::class, 'update'])->name('update');
+    //     Route::delete('/{id}/destroy', [StudentController::class, 'destroy'])->name('destroy');
+    // });
+    Route::prefix('company')->name('company.')->group(function () {
+        Route::get('/', [CompanyController::class, 'index'])->name('index');
+        Route::get('/create', [CompanyController::class, 'create'])->name('create');
+        Route::post('/create', [CompanyController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [CompanyController::class, 'edit'])->name('edit');
+        Route::post('/{id}/edit', [CompanyController::class, 'update'])->name('update');
+        Route::get('/{id}/detail', [CompanyController::class, 'detail'])->name('detail');
+        Route::delete('/{id}/destroy', [CompanyController::class, 'destroy'])->name('destroy');
     });
 });
 
