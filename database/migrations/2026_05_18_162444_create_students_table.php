@@ -19,6 +19,9 @@ return new class extends Migration
             $table->bigInteger('std_nisn')->nullable();
             $table->unsignedBigInteger('std_classes_id')->nullable();
             $table->foreign('std_classes_id')->references('cls_id')->on('classes')->onDelete('cascade');
+            $table->unsignedBigInteger('std_company_id')->nullable();
+            $table->foreign('std_company_id')->references('cmp_id')->on('companies')->onDelete('cascade');
+            
             // $table->string('std_name');
             $table->string('std_nickname')->nullable();
             $table->timestamps();

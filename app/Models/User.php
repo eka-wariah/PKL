@@ -32,9 +32,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     public function mentor()
     {
         return $this->hasOne(Mentor::class,'mtr_usr_id','usr_id');
         // default: FK = user_id, PK = id
     }
+
+    public function student()
+{
+    return $this->hasOne(Student::class, 'std_usr_id');
+}
+
 }
