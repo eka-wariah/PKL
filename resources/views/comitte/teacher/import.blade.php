@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <div class="mb-4 d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0">Import Data Guru</h4>
-                            <a href="/comitte/mentor" class="btn btn-secondary">
+                            <a href="/comitte/teacher" class="btn btn-secondary">
                                 <i class="ti ti-arrow-left me-1"></i> Kembali
                             </a>
                         </div>
@@ -101,7 +101,7 @@
                             </div>
 
                             <div class="d-flex gap-2 justify-content-end">
-                                <a href="/comitte/mentor" class="btn btn-secondary">Batal</a>
+                                <a href="/comitte/teacher" class="btn btn-secondary">Batal</a>
                                 <button type="submit" class="btn btn-primary">
                                     <i class="ti ti-upload me-1"></i> Import Sekarang
                                 </button>
