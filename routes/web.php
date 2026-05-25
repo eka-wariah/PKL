@@ -108,6 +108,8 @@ Route::prefix('mentor')->name('mentor.')->group(function () {
     Route::prefix('guidance')->name('guidance.')->group(function () {
         
         Route::get('/', [GuidanceController::class, 'index'])->name('index');
+        Route::get('/create', [GuidanceController::class, 'create'])->name('create');
+
         
 
 

@@ -15,4 +15,8 @@ class GuidanceController extends Controller
         // dd($newsFollowUp);
         return view('mentor.guidance.index',compact(['news','newsFollowUp']));
     }
+
+    public function create(){
+        return view('mentor.guidance.create');
+    }
 }

@@ -56,7 +56,7 @@
                     <div class="tab-pane fade show active" id="reguler" role="tabpanel">
                         <div class="mb-4 d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Daftar Bimbingan Reguler</h5>
-                            <a href="#" class="btn btn-primary btn-sm">
+                            <a href="/mentor/guidance/create" class="btn btn-primary btn-sm">
                                 <i class="ti ti-plus me-1"></i> Tambah Bimbingan
                             </a>
                         </div>
