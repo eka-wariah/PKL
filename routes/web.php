@@ -57,6 +57,9 @@ Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::post('/{id}/edit', [StudentController::class, 'update'])->name('update');
         Route::get('/{id}/detail', [StudentController::class, 'show'])->name('detail');
         Route::delete('/{id}/destroy', [StudentController::class, 'destroy'])->name('destroy');
+        Route::get('/import', [StudentController::class, 'importPage'])->name('importPage');
+        Route::post('/import', [StudentController::class, 'import'])->name('import');
+        Route::get('/template', [StudentController::class, 'downloadTemplate'])->name('template');
     });
     Route::prefix('academic-years')->name('academic_years.')->group(function () {
         Route::get('/', [AcademicYearController::class, 'index'])->name('academic_years');
