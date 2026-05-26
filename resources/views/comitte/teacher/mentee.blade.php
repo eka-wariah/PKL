@@ -42,7 +42,7 @@
                         Siswa Bimbingan — {{ $mentor->user->name }}
                     </h4>
                     <div class="d-flex gap-2">
-                        <a href="/comitte/mentor/{{ $mentor->mtr_id }}/students/create" class="btn btn-primary">
+                        <a href="/comitte/teacher/{{ $mentor->mtr_id }}/mentee/create" class="btn btn-primary">
                             <i class="ti ti-plus me-1"></i> Tambah
                         </a>
                         <a href="/comitte/mentor" class="btn btn-secondary">

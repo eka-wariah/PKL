@@ -20,14 +20,14 @@ return new class extends Migration
             $table->unsignedBigInteger('mas_academic_id');
             $table->foreign('mas_academic_id')->references('acy_id')->on('academic_years')->onDelete('cascade');
             $table->timestamps();
-            $table->renameColumn('updated_at', 'mtr_updated_at');
-            $table->renameColumn('created_at', 'mtr_created_at');
+            $table->renameColumn('updated_at', 'mas_updated_at');
+            $table->renameColumn('created_at', 'mas_created_at');
             $table->unsignedBigInteger('mas_created_by')->nullable();
             $table->unsignedBigInteger('mas_deleted_by')->nullable();
             $table->unsignedBigInteger('mas_updated_by')->nullable();
             $table->softDeletes(); // gunakan deleted_at
-            $table->renameColumn('deleted_at', 'mtr_deleted_at');
-            $table->string('mtr_sys_note')->nullable();
+            $table->renameColumn('deleted_at', 'mas_deleted_at');
+            $table->string('mas_sys_note')->nullable();
         });
     }
 

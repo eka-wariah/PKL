@@ -181,7 +181,7 @@ class TeacherController extends Controller
         });
         Alert::success('Berhasil Menambah', 'Siswa Bimbingna telah di tambahkan');
 
-        return redirect()->route('comitte.teacher.mentee', $mentor->mtr_id)
+        return redirect()->route('comitte.teacher.mentee', $mentor->user->usr_id)
             ->with('success', 'Siswa bimbingan berhasil ditambahkan.');
     }
 

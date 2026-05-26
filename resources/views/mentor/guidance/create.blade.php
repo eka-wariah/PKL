@@ -55,16 +55,15 @@
                     </div>
                 @endif
 
-                <form action="#" method="POST">
+                <form action="{{ route('mentor.guidance.store') }}" method="POST">
                     @csrf
 
                     {{-- Minggu & Jam --}}
                     <div class="row mb-3">
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Bimbingan Minggu Ke
-                            </label>
-                            <input type="number" class="form-control bg-light" name="minggu_ke" value="5" readonly>
+                            <label class="form-label fw-semibold">Bimbingan Minggu Ke</label>
+                            <input type="number" class="form-control bg-light"
+                                name="news_week_number" value="{{ $weekNumber }}" readonly>
                             <small class="text-muted">Dihitung otomatis oleh sistem.</small>
                         </div>
 
@@ -72,9 +71,9 @@
                             <label class="form-label fw-semibold">
                                 Jam Mulai <span class="text-danger">*</span>
                             </label>
-                            <input type="time" class="form-control @error('jam_mulai') is-invalid @enderror"
-                                name="jam_mulai" value="{{ old('jam_mulai') }}">
-                            @error('jam_mulai')
+                            <input type="time" class="form-control @error('news_start') is-invalid @enderror"
+                                name="news_start" value="{{ old('news_start') }}">
+                            @error('news_start')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -83,9 +82,9 @@
                             <label class="form-label fw-semibold">
                                 Jam Selesai <span class="text-danger">*</span>
                             </label>
-                            <input type="time" class="form-control @error('jam_selesai') is-invalid @enderror"
-                                name="jam_selesai" value="{{ old('jam_selesai') }}">
-                            @error('jam_selesai')
+                            <input type="time" class="form-control @error('news_ended') is-invalid @enderror"
+                                name="news_ended" value="{{ old('news_ended') }}">
+                            @error('news_ended')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -96,41 +95,34 @@
                         <label class="form-label fw-semibold">
                             Siswa Hadir <span class="text-danger">*</span>
                         </label>
-                        <select class="form-control @error('siswa_hadir') is-invalid @enderror" name="siswa_hadir[]"
-                            id="siswaHadir" multiple>
-                            {{-- static dummy, nanti diganti $students --}}
-                            <option value="1">Ahmad Fauzi — 2024001</option>
-                            <option value="2">Budi Santoso — 2024002</option>
-                            <option value="3">Citra Dewi — 2024003</option>
-                            <option value="4">Deni Kurniawan — 2024004</option>
-                            <option value="5">Eka Putri — 2024005</option>
-                            <option value="6">Fajar Ramadhan — 2024006</option>
+                        <select class="form-control @error('siswa_hadir') is-invalid @enderror"
+                            name="siswa_hadir[]" id="siswaHadir" multiple>
+                            @foreach ($students as $student)
+                                <option value="{{ $student->std_id }}"
+                                    {{ in_array($student->std_id, old('siswa_hadir', [])) ? 'selected' : '' }}>
+                                    {{ $student->user->name }} — {{ $student->std_nis ?? 'NIS belum diisi' }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('siswa_hadir')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="text-muted">Bisa pilih lebih dari satu siswa.</small>
                     </div>
+
                     {{-- Foto Dokumentasi --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold">
-                            Foto Dokumentasi
-                        </label>
-
-                        {{-- Preview & Kamera --}}
+                        <label class="form-label fw-semibold">Foto Dokumentasi</label>
                         <div class="border rounded p-3 bg-light">
 
-                            {{-- Video stream (saat kamera aktif) --}}
                             <video id="kameraPreview" class="w-100 rounded mb-2" autoplay playsinline
                                 style="display:none; max-height: 320px; object-fit: cover;"></video>
 
-                            {{-- Preview foto yang sudah diambil --}}
                             <div id="fotoPreviewWrapper" style="display:none;" class="mb-2">
                                 <img id="fotoPreview" src="" class="img-fluid rounded"
                                     style="max-height: 320px; object-fit: cover; width: 100%;">
                             </div>
 
-                            {{-- Placeholder kosong --}}
                             <div id="fotoPlaceholder"
                                 class="flex-column align-items-center justify-content-center text-muted rounded"
                                 style="height: 180px; border: 2px dashed #ccc; background: #fff; display: flex;">
@@ -138,13 +130,10 @@
                                 <span>Belum ada foto</span>
                             </div>
 
-                            {{-- Canvas tersembunyi untuk capture --}}
                             <canvas id="fotoCanvas" style="display:none;"></canvas>
 
-                            {{-- Input hidden untuk kirim base64 ke server --}}
-                            <input type="hidden" name="foto_dokumentasi" id="fotoDokumentasi">
+                            <input type="hidden" name="news_image" id="fotoDokumentasi">
 
-                            {{-- Tombol aksi --}}
                             <div class="d-flex gap-2 mt-3">
                                 <button type="button" class="btn btn-outline-primary" id="btnBukaKamera">
                                     <i class="ti ti-camera me-1"></i> Buka Kamera
@@ -152,8 +141,7 @@
                                 <button type="button" class="btn btn-success" id="btnAmbilFoto" style="display:none;">
                                     <i class="ti ti-aperture me-1"></i> Ambil Foto
                                 </button>
-                                <button type="button" class="btn btn-outline-danger" id="btnRetake"
-                                    style="display:none;">
+                                <button type="button" class="btn btn-outline-danger" id="btnRetake" style="display:none;">
                                     <i class="ti ti-refresh me-1"></i> Ulangi
                                 </button>
                             </div>
@@ -167,33 +155,32 @@
                         <label class="form-label fw-semibold">
                             Isi Bimbingan <span class="text-danger">*</span>
                         </label>
-                        <textarea class="form-control @error('isi_bimbingan') is-invalid @enderror" name="isi_bimbingan" rows="4"
-                            placeholder="Tuliskan isi/materi bimbingan...">{{ old('isi_bimbingan') }}</textarea>
-                        @error('isi_bimbingan')
+                        <textarea class="form-control @error('news_guidance_material') is-invalid @enderror"
+                            name="news_guidance_material" rows="4"
+                            placeholder="Tuliskan isi/materi bimbingan...">{{ old('news_guidance_material') }}</textarea>
+                        @error('news_guidance_material')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     {{-- Kendala --}}
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">
-                            Kendala
-                        </label>
-                        <textarea class="form-control @error('kendala') is-invalid @enderror" name="kendala" rows="3"
-                            placeholder="Tuliskan kendala yang dihadapi (jika ada)...">{{ old('kendala') }}</textarea>
-                        @error('kendala')
+                        <label class="form-label fw-semibold">Kendala</label>
+                        <textarea class="form-control @error('news_problem') is-invalid @enderror"
+                            name="news_problem" rows="3"
+                            placeholder="Tuliskan kendala yang dihadapi (jika ada)...">{{ old('news_problem') }}</textarea>
+                        @error('news_problem')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     {{-- Catatan --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold">
-                            Catatan
-                        </label>
-                        <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" rows="3"
-                            placeholder="Tuliskan catatan tambahan (jika ada)...">{{ old('catatan') }}</textarea>
-                        @error('catatan')
+                        <label class="form-label fw-semibold">Catatan</label>
+                        <textarea class="form-control @error('news_note') is-invalid @enderror"
+                            name="news_note" rows="3"
+                            placeholder="Tuliskan catatan tambahan (jika ada)...">{{ old('news_note') }}</textarea>
+                        @error('news_note')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -222,73 +209,58 @@
         });
     </script>
     <script>
-        // === KAMERA ===
         let kameraStream = null;
 
-        const video = document.getElementById('kameraPreview');
-        const canvas = document.getElementById('fotoCanvas');
-        const preview = document.getElementById('fotoPreview');
+        const video       = document.getElementById('kameraPreview');
+        const canvas      = document.getElementById('fotoCanvas');
+        const preview     = document.getElementById('fotoPreview');
         const placeholder = document.getElementById('fotoPlaceholder');
         const previewWrap = document.getElementById('fotoPreviewWrapper');
-        const inputFoto = document.getElementById('fotoDokumentasi');
+        const inputFoto   = document.getElementById('fotoDokumentasi');
+        const btnBuka     = document.getElementById('btnBukaKamera');
+        const btnAmbil    = document.getElementById('btnAmbilFoto');
+        const btnRetake   = document.getElementById('btnRetake');
 
-        const btnBuka = document.getElementById('btnBukaKamera');
-        const btnAmbil = document.getElementById('btnAmbilFoto');
-        const btnRetake = document.getElementById('btnRetake');
-
-        // Buka kamera
         btnBuka.addEventListener('click', async function() {
             try {
                 kameraStream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'environment'
-                    }
+                    video: { facingMode: 'environment' }
                 });
-
-                console.log('placeholder element:', placeholder); // cek apakah null
-                console.log('video element:', video);
-
                 video.srcObject = kameraStream;
-                video.style.display = 'block';
+                video.style.display      = 'block';
                 placeholder.style.display = 'none';
                 previewWrap.style.display = 'none';
-
-                btnBuka.style.display = 'none';
-                btnAmbil.style.display = 'inline-block';
+                btnBuka.style.display    = 'none';
+                btnAmbil.style.display   = 'inline-block';
             } catch (err) {
                 alert('Tidak bisa mengakses kamera.');
                 console.error(err);
             }
         });
 
-        // Ambil foto
         btnAmbil.addEventListener('click', function() {
-            canvas.width = video.videoWidth;
+            canvas.width  = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
 
-            const base64 = canvas.toDataURL('image/jpeg', 0.85);
+            const base64   = canvas.toDataURL('image/jpeg', 0.85);
             inputFoto.value = base64;
-            preview.src = base64;
+            preview.src     = base64;
 
-            // Matikan kamera
             kameraStream.getTracks().forEach(t => t.stop());
-            video.style.display = 'none';
+            video.style.display       = 'none';
             previewWrap.style.display = 'block';
-
-            btnAmbil.style.display = 'none';
-            btnRetake.style.display = 'inline-block';
+            btnAmbil.style.display    = 'none';
+            btnRetake.style.display   = 'inline-block';
         });
 
-        // Ulangi / retake
         btnRetake.addEventListener('click', function() {
-            inputFoto.value = '';
-            preview.src = '';
+            inputFoto.value           = '';
+            preview.src               = '';
             previewWrap.style.display = 'none';
             placeholder.style.display = 'flex';
-
-            btnRetake.style.display = 'none';
-            btnBuka.style.display = 'inline-block';
+            btnRetake.style.display   = 'none';
+            btnBuka.style.display     = 'inline-block';
         });
     </script>
 @endpush
