@@ -44,7 +44,7 @@ class StudentImport implements ToCollection, WithHeadingRow
                 $companyId = $companies[$row['perusahaan']] ?? null;
     
                 // skip kalau mapping gagal
-                if (!$classId || !$companyId) {
+                if (!$classId) {
                     continue;
                 }
     
