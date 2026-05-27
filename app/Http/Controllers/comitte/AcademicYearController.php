@@ -43,7 +43,13 @@ class AcademicYearController extends Controller
      */
     public function create()
     {
-        $years = [date('Y'), date('Y') + 1];
+        $startYear = date('Y');
+
+        $years = [];
+
+        for ($i = 0; $i < 2; $i++) {
+            $years[] = $startYear + $i;
+        }
 
         return view('comitte.academic-year.create', compact('years'));
     }
