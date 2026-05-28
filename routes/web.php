@@ -124,7 +124,9 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
             Route::get('/', [GuidanceController::class, 'index'])->name('index');
             Route::get('/create', [GuidanceController::class, 'create'])->name('create');
             Route::post('/create', [GuidanceController::class, 'store'])->name('store');
+            Route::get('/{id}/show', [GuidanceController::class, 'show'])->name('show');
         });
+
     });
 });
 Route::prefix('student')->name('student.')->group(function () {

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MentorAssignments extends Model
 {
-     protected $guarded =[];
+    protected $guarded = [];
     protected $primaryKey = 'mas_id';
 
     const CREATED_AT = 'mas_created_at';
@@ -22,4 +22,5 @@ class MentorAssignments extends Model
     {
         return $this->belongsTo(Mentor::class, 'mas_mentor_id', 'mtr_id');
     }
+    
 }
