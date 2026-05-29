@@ -4,6 +4,7 @@ use App\Http\Controllers\comitte\AcademicYearController;
 use App\Http\Controllers\comitte\ClassesController;
 use App\Http\Controllers\comitte\CompanyController;
 use App\Http\Controllers\comitte\DashboardController;
+use App\Http\Controllers\comitte\GuidanceController as ComitteGuidanceController;
 use App\Http\Controllers\comitte\TeacherController;
 use App\Http\Controllers\comitte\MajorController;
 use App\Http\Controllers\comitte\StudentController;
@@ -69,6 +70,9 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
             Route::post('/{id}/edit', [StudentController::class, 'update'])->name('update');
             Route::get('/{id}/detail', [StudentController::class, 'show'])->name('detail');
             Route::delete('/{id}/destroy', [StudentController::class, 'destroy'])->name('destroy');
+            Route::get('/import', [StudentController::class, 'importPage'])->name('importPage');
+            Route::post('/import', [StudentController::class, 'import'])->name('import');
+            Route::get('/template', [StudentController::class, 'downloadTemplate'])->name('template');
         });
         Route::prefix('academic-years')->name('academic_years.')->group(function () {
             Route::get('/', [AcademicYearController::class, 'index'])->name('academic_years');
@@ -112,21 +116,13 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
             Route::get('/{id}/detail', [CompanyController::class, 'detail'])->name('detail');
             Route::delete('/{id}/destroy', [CompanyController::class, 'destroy'])->name('destroy');
         });
+        Route::prefix('guidance')->name('guidance.')->group(function () {
+
+            Route::get('/', [ComitteGuidanceController::class, 'index'])->name('index');
+            Route::get('/{id}/show', [ComitteGuidanceController::class, 'show'])->name('show');
+        });
     });
 
-
-    Route::prefix('student')->name('student.')->group(function () {
-        Route::get('/', [StudentController::class, 'index'])->name('index');
-        Route::get('/create', [StudentController::class, 'create'])->name('create');
-        Route::post('/create', [StudentController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('edit');
-        Route::post('/{id}/edit', [StudentController::class, 'update'])->name('update');
-        Route::get('/{id}/detail', [StudentController::class, 'show'])->name('detail');
-        Route::delete('/{id}/destroy', [StudentController::class, 'destroy'])->name('destroy');
-        Route::get('/import', [StudentController::class, 'importPage'])->name('importPage');
-        Route::post('/import', [StudentController::class, 'import'])->name('import');
-        Route::get('/template', [StudentController::class, 'downloadTemplate'])->name('template');
-    });
     Route::prefix('academic-years')->name('academic_years.')->group(function () {
         Route::get('/', [AcademicYearController::class, 'index'])->name('academic_years');
         Route::get('/create', [AcademicYearController::class, 'create'])->name('academic_years.create');

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ComitteSeeder::class,
             MentorSeeder::class,
             StudentSeeder::class,
+            AcademicSeeder::class,
         ]);
     }
 }

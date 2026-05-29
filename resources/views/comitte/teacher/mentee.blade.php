@@ -45,7 +45,7 @@
                         <a href="/comitte/teacher/{{ $mentor->mtr_id }}/mentee/create" class="btn btn-primary">
                             <i class="ti ti-plus me-1"></i> Tambah
                         </a>
-                        <a href="/comitte/mentor" class="btn btn-secondary">
+                        <a href="/comitte/teacher" class="btn btn-secondary">
                             <i class="ti ti-arrow-left me-1"></i> Kembali
                         </a>
                     </div>
