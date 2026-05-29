@@ -51,7 +51,9 @@
                           <option hidden value="">Pilih Tahun</option>
                   
                           @foreach ($years as $year)
-                              <option value="{{ $year }}">{{ $year }}</option>
+                          <option value="{{ $year }}">
+                            {{ $year }}/{{ $year + 1 }}
+                        </option>
                           @endforeach
                   
                       </select>

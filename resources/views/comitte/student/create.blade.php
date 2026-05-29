@@ -123,9 +123,7 @@
                             <label for="std_company_id" class="form-label fw-semibold">
                                 Perusahaan <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select mr-sm-2"  name="std_company_id"
-                                    oninvalid="this.setCustomValidity('Kelas wajib diisi')"
-                                    onchange="this.setCustomValidity('')" required>
+                            <select class="form-select mr-sm-2"  name="std_company_id">
                                     <option selected value="">Pilih...</option>
                                     @foreach ($company as $cmp)
                                         <option value="{{ $cmp->cmp_id }}">{{ $cmp->cmp_name }}</option>

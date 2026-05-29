@@ -10,6 +10,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\StudentTemplateExport;
+use App\Imports\StudentImport;
+
+
 
 class StudentController extends Controller
 {
@@ -106,5 +111,33 @@ class StudentController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function importPage()
+    {
+        return view('comitte.student.import');
+    }
+
+    public function downloadTemplate()
+{
+    return Excel::download(
+        new StudentTemplateExport,
+        'template-student.xlsx'
+    );
+}
+    // public function downloadTemplate()
+    // {
+    //     return Excel::download(new StudentTemplateExport, 'template-siswa.xlsx');
+    // }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+        // dd(class_exists(\ZipArchive::class));
+        Excel::import(new StudentImport, $request->file('file'));
+        Alert::success('Berhasil Import', 'Data Guru Berhasil Diimport');
+        return redirect()->route('comitte.student.index')
+            ->with('success', 'Data siswa berhasil diimport.');
     }
 }

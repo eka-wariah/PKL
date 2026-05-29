@@ -36,10 +36,20 @@
        
         <div class="card">
             <div class="card-body">
-                <div class="mb-5 position-relative">
+                <div class="mb-4 d-flex justify-content-between align-items-center">
                     <h4 class="card-title mb-0">Daftar Siswa</h4>
-                    <a href="/comitte/student/create" class="btn btn-primary position-absolute top-0 end-0">Tambah Data Siswa</a>
-                </div>
+                    
+        
+               
+                <div class="d-flex gap-2">
+                  <a href="{{ route('comitte.student.importPage') }}" class="btn btn-success">
+                    <i class="ti ti-file-import me-1"></i> Import Siswa
+                </a>
+                  <a href="{{ route('comitte.student.create') }}" class="btn btn-primary">
+                      <i class="ti ti-plus me-1"></i> Tambah Siswa
+                  </a>
+              </div>
+            </div>
                 <p class="card-subtitle mb-3">
                     
                 </p>
