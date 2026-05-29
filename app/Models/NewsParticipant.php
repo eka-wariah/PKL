@@ -23,4 +23,9 @@ class NewsParticipant extends Model
     {
         return $this->belongsTo(Mentor::class, 'nwp_mentor_id', 'mtr_id');
     }
+    // NewsParticipant.php
+    public function news()
+    {
+        return $this->belongsTo(News::class, 'nwp_news_id', 'news_id');
+    }
 }

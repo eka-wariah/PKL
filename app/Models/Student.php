@@ -45,4 +45,8 @@ public function major()
 {
     return $this->belongsTo(Major::class, 'std_major_id', 'mjr_id');
 }
+public function newsParticipants()
+{
+    return $this->hasMany(NewsParticipant::class, 'nwp_student_id', 'std_id');
+}
 }
