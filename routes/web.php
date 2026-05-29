@@ -179,6 +179,10 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
             Route::get('/create', [GuidanceController::class, 'create'])->name('create');
             Route::post('/create', [GuidanceController::class, 'store'])->name('store');
             Route::get('/{id}/show', [GuidanceController::class, 'show'])->name('show');
+            Route::get('/{id}/follow-up', [GuidanceController::class, 'followUp'])->name('followUp');
+            Route::post('/{id}/follow-up', [GuidanceController::class, 'followUpStore'])->name('followUpStore');
+
+
         });
 
     });

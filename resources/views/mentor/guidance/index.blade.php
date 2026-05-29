@@ -82,13 +82,13 @@
                                         <td>{{$news->news_date?? '-'}}</td>
                                         <td>
                                             <div class="d-flex gap-1">
-                                                <a href="/mentor/guidance/{{$news->news_id}}/show" class="btn btn-sm btn-info" title="Detail">
+                                                <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-info" title="Detail">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="ti ti-edit"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-sm btn-secondary"
+                                                <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
                                                     title="Buat Bimbingan Susulan">
                                                     <i class="ti ti-calendar-plus"></i>
                                                 </a>
@@ -140,13 +140,13 @@
                                         <td>{{$news->news_date?? '-'}}</td>
                                         <td>
                                             <div class="d-flex gap-1">
-                                                <a href="#" class="btn btn-sm btn-info" title="Detail">
+                                                <a href="/mentor/guidance/{{$news->news_id}}/show" class="btn btn-sm btn-info" title="Detail">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
                                                 <a href="#" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="ti ti-edit"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-sm btn-secondary"
+                                                <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
                                                     title="Buat Bimbingan Susulan">
                                                     <i class="ti ti-calendar-plus"></i>
                                                 </a>
