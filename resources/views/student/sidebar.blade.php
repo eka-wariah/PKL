@@ -37,7 +37,7 @@
                   <span class="hide-menu">Kegiatan PKL</span>
               </li>
               <li class="sidebar-item">
-                  <a class="sidebar-link" href="/student/presensi/" aria-expanded="false">
+                  <a class="sidebar-link" href="/student/presence/" aria-expanded="false">
                       <span>
                         <i class="ti ti-calendar-user"></i>
                       </span>

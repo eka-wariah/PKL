@@ -13,36 +13,38 @@
     <div class="datatables">
         <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
             <div class="card-body px-4 py-3">
-              <div class="row align-items-center">
-                <div class="col-9">
-                  <h4 class="fw-semibold mb-8">TAHUN AJARAN</h4>
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                    <li class="breadcrumb-item" aria-current="page">Daftar Tahun Ajaran</li>
-                      <li class="breadcrumb-item">
-                        @if ($academic_year->isEmpty() || $academic_year->contains('acy_status', 1))
-                        <a class="text-muted text-decoration-none" href="/comitte/academic-years/create">Tambah Tahun Ajaran</a>
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <h4 class="fw-semibold mb-8">TAHUN AJARAN</h4>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item" aria-current="page">Daftar Tahun Ajaran</li>
+                                <li class="breadcrumb-item">
+                                    @if ($academic_year->isEmpty() || $academic_year->contains('acy_status', 1))
+                                        <a class="text-muted text-decoration-none"
+                                            href="/comitte/academic-years/create">Tambah Tahun Ajaran</a>
+                                    @else
+                                        <a class="text-muted text-decoration-none" disabled>Tambah Tahun Ajaran</a>
+                                    @endif
 
-                          @else
-                          <a class="text-muted text-decoration-none" disabled>Tambah Tahun Ajaran</a>
-                          @endif
-                       
-                      </li>
-                      <li class="breadcrumb-item">
-                        <a class="text-muted text-decoration-none" href="/administration/academic-years/{id}/edit">Edit Tahun Ajaran</a>
-                      </li>
-                    </ol>
-                   
-                  </nav>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a class="text-muted text-decoration-none"
+                                        href="/administration/academic-years/{id}/edit">Edit Tahun Ajaran</a>
+                                </li>
+                            </ol>
+
+                        </nav>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-center mb-n5">
+                            <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt="modernize-img"
+                                class="img-fluid mb-n4" />
+                        </div>
+                    </div>
                 </div>
-                <div class="col-3">
-                  <div class="text-center mb-n5">
-                    <img src="{{ asset('assets/images/breadcrumb/ChatBc.png')}}" alt="modernize-img" class="img-fluid mb-n4" />
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
+        </div>
         <div class="card">
             <div class="card-body">
                 <div class="mb-5 position-relative">
@@ -50,18 +52,17 @@
 
                     {{-- <a href="/administration/academic_years/create" class="btn btn-primary position-absolute top-0 end-0">Tambah Kategori</a> --}}
                     @if ($academic_year->contains('acy_status', 0))
-    <button class="btn btn-primary position-absolute top-0 end-0" disabled>
-        Tambah Kategori
-    </button>
-@else
-    <a href="/comitte/academic-years/create"
-       class="btn btn-primary position-absolute top-0 end-0">
-       Tambah Kategori
-    </a>
-@endif
+                        <button class="btn btn-primary position-absolute top-0 end-0" disabled>
+                            Tambah Kategori
+                        </button>
+                    @else
+                        <a href="/comitte/academic-years/create" class="btn btn-primary position-absolute top-0 end-0">
+                            Tambah Kategori
+                        </a>
+                    @endif
                 </div>
                 <p class="card-subtitle mb-3">
-                    
+
                 </p>
                 <div class="table-responsive">
                     <table id="file_export" class="table w-100 table-striped table-bordered display text-nowrap">
@@ -72,40 +73,42 @@
                                 <th>Tahun Ajaran</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
-                                
+
                             </tr>
                             <!-- end row -->
                         </thead>
                         <tbody>
-                          <!-- start row -->
-                          @foreach ( $academic_year as $no=> $academic)
-                          <tr>
-                              
-                              <td>{{$no+1}}</td>
-                              <td>{{ $academic->academic_year }}</td>
-                              <td>
-                                @if($academic->acy_status == 1)
-                                    <span class="badge bg-success">Aktif</span>
-                                @else
-                                    <span class="badge bg-secondary">Nonaktif</span>
-                                @endif
-                            </td>
-                              <td>
-                                   <a href="/comitte/academic-years/{{ $academic->acy_id}}/edit" class="btn btn-primary">Edit</a>
-                                   <a href="/comitte/academic-years/{{ $academic->acy_id}}/destroy" class="btn btn-danger" data-confirm-delete="true">Delete</a>
+                            <!-- start row -->
+                            @foreach ($academic_year as $no => $academic)
+                                <tr>
 
-                              </td>
+                                    <td>{{ $no + 1 }}</td>
+                                    <td>{{ $academic->academic_year }}</td>
+                                    <td>
+                                        @if ($academic->acy_status == 1)
+                                            <span class="badge bg-success">Aktif</span>
+                                        @else
+                                            <span class="badge bg-secondary">Nonaktif</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="/comitte/academic-years/{{ $academic->acy_id }}/edit"
+                                            class="btn btn-primary">Edit</a>
+                                        <a href="/comitte/academic-years/{{ $academic->acy_id }}/destroy"
+                                            class="btn btn-danger" data-confirm-delete="true">Delete</a>
+
+                                    </td>
 
 
-                              
-                          </tr>
-                          @endforeach
-                          <!-- end row -->
-                          
-                      </tbody>
+
+                                </tr>
+                            @endforeach
+                            <!-- end row -->
+
+                        </tbody>
                         <tfoot>
                             <!-- start row -->
-                            
+
 
                             <tr>
                                 <th width="10%">No</th>
@@ -120,7 +123,6 @@
             </div>
         </div>
     </div>
-    
 @endsection
 
 

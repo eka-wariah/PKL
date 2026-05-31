@@ -55,7 +55,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('mentor.guidance.store') }}" method="POST">
+                <form action="{{ route('mentor.guidance.store') }}" id="guidanceForm" method="POST">
                     @csrf
 
                     {{-- Minggu & Jam --}}
@@ -186,8 +186,8 @@
                     </div>
 
                     <div class="d-flex gap-2 justify-content-end">
-                        <a href="/mentor/bimbingan" class="btn btn-secondary">Batal</a>
-                        <button type="submit" class="btn btn-primary">
+                        <a href="/mentor/bimbingan" class="btn btn-secondary" >Batal</a>
+                        <button type="button" class="btn btn-primary" id="btnSave">
                             <i class="ti ti-device-floppy me-1"></i> Simpan
                         </button>
                     </div>
@@ -263,4 +263,21 @@
             btnBuka.style.display     = 'inline-block';
         });
     </script>
+    <script>
+    document.getElementById('btnSave').addEventListener('click', function () {
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Yakin ingin menyimpan data ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Simpan',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('guidanceForm').submit();
+            }
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endpush
