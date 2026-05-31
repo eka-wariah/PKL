@@ -10,9 +10,11 @@ use App\Http\Controllers\comitte\MajorController;
 use App\Http\Controllers\comitte\StudentController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\GuidanceController;
-
+// use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\PresenceController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -189,6 +191,12 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
 });
 Route::prefix('student')->name('student.')->group(function () {
     Route::get('/', [StudentDashboardController::class, 'index'])->name('index');
+    Route::prefix('presence')->name('presence.')->group(function () {
+        Route::get('/', [PresenceController::class,'index'])->name('index');
+        Route::post('/', [PresenceController::class,'store'])->name('store');
+
+    });
+
 });
 
 require __DIR__ . '/auth.php';
