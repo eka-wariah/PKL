@@ -5,6 +5,8 @@ namespace App\Http\Controllers\comitte;
 use App\Http\Controllers\Controller;
 use App\Models\MentorAssignments;
 use App\Models\News;
+use App\Models\Student;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class GuidanceController extends Controller
@@ -72,4 +74,26 @@ class GuidanceController extends Controller
     {
         //
     }
+    public function exportPdf($id)
+{
+    $news = News::findOrFail($id);
+    $mentorAssignments = MentorAssignments::where('mas_mentor_id',$news->news_mentor_id)->get();
+    
+    $totalMentee = $mentorAssignments->count();
+    
+    $allStudentIds = $mentorAssignments->pluck('mas_student_id');
+    // $totalMentee = MentorAssignments::where('mas_mentor_id', $news->news_mentor_id)->count();
+    $allStudentIds = MentorAssignments::where('mas_mentor_id',$news->news_mentor_id)->pluck('mas_student_id');
+    $presentStudentIds = $news->participants->pluck('nwp_student_id');
+    $absentStudents = Student::with('user') ->whereIn( 'std_id',$allStudentIds->diff($presentStudentIds))->get();
+
+    $pdf = Pdf::loadView(
+        'comitte.guidance.news-pkl',
+        compact('news', 'totalMentee', 'absentStudents')
+    )->setPaper('a4', 'portrait');
+
+    return $pdf->download(
+        'berita-acara.pdf'
+    );
+}
 }

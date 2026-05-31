@@ -85,6 +85,9 @@
                                                 <a href="/comitte/guidance/{{$news->news_id}}/show" class="btn btn-sm btn-info" title="Detail">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
+                                                <a href="/comitte/guidance/{{$news->news_id}}/export-pdf" class="btn btn-sm btn-success" title="Download Berita Acara">
+                                                    <i class="ti ti-book-download"></i>
+                                                </a>
                                                 {{-- <a href="#" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="ti ti-edit"></i>
                                                 </a>

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\NewsParticipant;
 use App\Models\Mentor;
 use App\Models\MentorAssignment;
+use App\Models\Student;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -200,4 +202,27 @@ class GuidanceController extends Controller
          return redirect()->route('mentor.guidance.index')
             ->with('success', 'Bimbingan berhasil disimpan.');
     }
+
+    public function exportPdf($id)
+{
+    $news = News::findOrFail($id);
+    $mentorAssignments = MentorAssignments::where('mas_mentor_id',$news->news_mentor_id)->get();
+    
+    $totalMentee = $mentorAssignments->count();
+    
+    $allStudentIds = $mentorAssignments->pluck('mas_student_id');
+    // $totalMentee = MentorAssignments::where('mas_mentor_id', $news->news_mentor_id)->count();
+    $allStudentIds = MentorAssignments::where('mas_mentor_id',$news->news_mentor_id)->pluck('mas_student_id');
+    $presentStudentIds = $news->participants->pluck('nwp_student_id');
+    $absentStudents = Student::with('user') ->whereIn( 'std_id',$allStudentIds->diff($presentStudentIds))->get();
+
+    $pdf = Pdf::loadView(
+        'mentor.guidance.news-pkl',
+        compact('news', 'totalMentee', 'absentStudents')
+    )->setPaper('a4', 'portrait');
+
+    return $pdf->download(
+        'berita-acara.pdf'
+    );
+}
 }

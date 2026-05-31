@@ -120,6 +120,7 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
 
             Route::get('/', [ComitteGuidanceController::class, 'index'])->name('index');
             Route::get('/{id}/show', [ComitteGuidanceController::class, 'show'])->name('show');
+            Route::get('/{id}/export-pdf',[ComitteGuidanceController::class, 'exportPdf'])->name('export.pdf');
         });
     });
 
@@ -181,6 +182,8 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
             Route::get('/{id}/show', [GuidanceController::class, 'show'])->name('show');
             Route::get('/{id}/follow-up', [GuidanceController::class, 'followUp'])->name('followUp');
             Route::post('/{id}/follow-up', [GuidanceController::class, 'followUpStore'])->name('followUpStore');
+            // Route::get('/{id}/export-word',[GuidanceController::class, 'exportWord'])->name('guidance.export.word');
+            Route::get('/{id}/export-pdf',[GuidanceController::class, 'exportPdf'])->name('guidance.export.pdf');
 
 
         });
