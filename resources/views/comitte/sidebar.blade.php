@@ -21,6 +21,7 @@
     $majorActive = request()->routeIs('comitte.major.*') ? 'active' : '';
     $classActive = request()->routeIs('comitte.classes.*') ? 'active' : '';
     $companyActive = request()->routeIs('comitte.company.*') ? 'active' : '';
+    $guidanceActive = request()->routeIs('comitte.guidance.*') ? 'active' : '';
         @endphp
         <ul id="sidebarnav">
           <!-- ---------------------------------- -->
@@ -46,53 +47,13 @@
           <!-- ---------------------------------- -->
           <li class="nav-small-cap">
             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-<<<<<<< HEAD
-            <span class="hide-menu">Akademik</span>
-=======
             <span class="hide-menu">Data Siswa</span>
->>>>>>> 8f2ae9cfecebc6d2650792c1ce3f356bbae9628d
           </li>
           <!-- ---------------------------------- -->
           <!-- Dashboard -->
           <!-- ---------------------------------- -->
           <li class="sidebar-item">
-<<<<<<< HEAD
-            <a class="sidebar-link" href="/comitte/academic-years/"  aria-expanded="false">
-              <span>
-                <i class="ti ti-user"></i>
-              </span>
-              <span class="hide-menu">Tahun Ajaran</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="/comitte/major/"  aria-expanded="false">
-              <span>
-                <i class="ti ti-user"></i>
-              </span>
-              <span class="hide-menu">Jurusan</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="/comitte/classes/"  aria-expanded="false">
-              <span>
-                <i class="ti ti-user"></i>
-              </span>
-              <span class="hide-menu">Kelas</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="/comitte/company/"  aria-expanded="false">
-              <span>
-                <i class="ti ti-user"></i>
-              </span>
-              <span class="hide-menu">Perusahaan</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="/comitte/student/"  aria-expanded="false">
-=======
             <a class="sidebar-link {{ $studentActive }}" href="/comitte/student/"  aria-expanded="false">
->>>>>>> 8f2ae9cfecebc6d2650792c1ce3f356bbae9628d
               <span>
                 <i class="ti ti-user"></i>
               </span>
@@ -146,7 +107,7 @@
 
           <li class="nav-small-cap">
             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-            <span class="hide-menu">Hubungan Industri</span>
+            <span class="hide-menu">Praktek Kerja Lapangan</span>
           </li>
 
           <li class="sidebar-item">
@@ -155,6 +116,15 @@
                 <i class="ti ti-building-skyscraper"></i>
               </span>
               <span class="hide-menu">Perusahaan</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link {{ $guidanceActive }}" href="/comitte/guidance/"  aria-expanded="false">
+              <span>
+                <i class="ti ti-building-community"></i>
+              </span>
+              <span class="hide-menu">Bimbingan</span>
             </a>
           </li>
 

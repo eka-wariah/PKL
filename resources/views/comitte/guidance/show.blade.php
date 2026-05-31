@@ -14,7 +14,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="/mentor/guidance">Daftar Bimbingan</a>
+                                    <a href="/comitte/guidance/">Daftar Bimbingan</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">Detail Bimbingan</li>
                             </ol>
@@ -38,11 +38,11 @@
                         <div class="mb-4 d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0">Detail Bimbingan</h4>
                             <div class="d-flex gap-2">
-                                <a href=""
+                                {{-- <a href=""
                                     class="btn btn-warning btn-sm">
                                     <i class="ti ti-edit me-1"></i> Edit
-                                </a>
-                                <a href="/mentor/guidance" class="btn btn-secondary btn-sm">
+                                </a> --}}
+                                <a href="/comitte/guidance/" class="btn btn-secondary btn-sm">
                                     <i class="ti ti-arrow-left me-1"></i> Kembali
                                 </a>
                             </div>
