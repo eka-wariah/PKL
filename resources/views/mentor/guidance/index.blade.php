@@ -88,9 +88,17 @@
                                                 <a href="/mentor/guidance/{{$news->news_id}}/export-pdf" class="btn btn-sm btn-success" title="Download Berita Acara">
                                                     <i class="ti ti-book-download"></i>
                                                 </a>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-primary preview-image"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#imageModal"
+                                                    data-image="{{ Storage::url($news->news_image) }}"
+                                                    data-download="/mentor/guidance/{{$news->news_id}}/photo/download">
+                                                    <i class="ti ti-photo"></i>
+                                                </button> 
                                                 <a href="#" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="ti ti-edit"></i>
-                                                </a>
+                                                </a> 
                                                 <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
                                                     title="Buat Bimbingan Susulan">
                                                     <i class="ti ti-calendar-plus"></i>
@@ -99,6 +107,7 @@
                                                     onclick="confirmDelete(1)">
                                                     <i class="ti ti-trash"></i>
                                                 </button>
+                                                
                                             </div>
                                         </td>
                                     </tr>
@@ -179,6 +188,50 @@
         </div>
     </div>
 @endsection
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Preview Foto Bimbingan
+                </h5>
+
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body text-center">
+
+                <img id="previewImage"
+                    src=""
+                    class="img-fluid rounded shadow"
+                    style="max-height:700px;">
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    Kembali
+                </button>
+
+                <a href="#"
+                    id="downloadBtn"
+                    class="btn btn-success">
+                    <i class="ti ti-download"></i>
+                    Download
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 @push('script')
     <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
@@ -215,5 +268,16 @@
                 window.location.href = `/mentor/bimbingan/${id}/delete`;
             }
         }
+    </script>
+     <script>
+        $('.preview-image').click(function() {
+
+        let image = $(this).data('image');
+        let download = $(this).data('download');
+
+        $('#previewImage').attr('src', image);
+        $('#downloadBtn').attr('href', download);
+
+        });
     </script>
 @endpush

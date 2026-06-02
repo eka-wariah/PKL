@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GuidanceController extends Controller
 {
@@ -94,6 +95,15 @@ class GuidanceController extends Controller
 
     return $pdf->download(
         'berita-acara.pdf'
+    );
+}
+public function downloadPhoto($id)
+{
+    $news = News::findOrFail($id);
+
+    return Storage::disk('public')->download(
+        $news->news_image,
+        basename($news->news_image)
     );
 }
 }

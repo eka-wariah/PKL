@@ -225,4 +225,13 @@ class GuidanceController extends Controller
         'berita-acara.pdf'
     );
 }
+public function downloadPhoto($id)
+{
+    $news = News::findOrFail($id);
+
+    return Storage::disk('public')->download(
+        $news->news_image,
+        basename($news->news_image)
+    );
+}
 }
