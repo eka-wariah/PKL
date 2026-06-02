@@ -49,4 +49,16 @@ public function newsParticipants()
 {
     return $this->hasMany(NewsParticipant::class, 'nwp_student_id', 'std_id');
 }
+public function attendances()
+{
+    return $this->hasMany(Attendance::class, 'att_std_id', 'std_id');
+}
+
+public function attendanceToday()
+{
+    return $this->hasOne(Attendance::class, 'att_std_id', 'std_id')
+        ->whereDate('att_date', today());
+}
+
+
 }

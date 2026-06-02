@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Mentor;
 
 use App\Http\Controllers\Controller;
+use App\Models\MentorAssignments;
+use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -12,7 +16,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('mentor.dashboard');
+        $students = MentorAssignments::with('student.attendanceToday')
+    ->where('mas_mentor_id', Auth::user()->mentor->mtr_id)
+    ->get();
+    $guidances = News::where('news_mentor_id', Auth::user()->mentor->mtr_id)->where('news_parent_id',null)->get();
+
+        // dd($students);
+        return view('mentor.dashboard',compact(['students','guidances']));
     }
 
     /**
