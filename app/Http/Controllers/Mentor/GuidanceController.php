@@ -34,7 +34,7 @@ class GuidanceController extends Controller
         // dd()
         // dd(Auth::user()->mentor->mtr_id);
         $students = collect(); // default kosong
-
+        
         if ($academicYears) {
             $students = MentorAssignments::with('student.user')
                 ->where('mas_mentor_id', $mentorId)
@@ -119,7 +119,13 @@ class GuidanceController extends Controller
     public function show($id)
     {
         $news = News::findOrFail($id);
-        $totalMentee = MentorAssignments::where('mas_mentor_id', $news->news_mentor_id)->count();
+        $audience = 0;
+        if($news->news_parent_id != null){
+            $audience = NewsParticipant::where('nwp_news_id',$news->news_parent_id)->count();
+        }
+        // dd($audience);
+
+        $totalMentee = MentorAssignments::where('mas_mentor_id', $news->news_mentor_id)->count() - $audience;
         // dd($totalMentee);
 
         return view('mentor.guidance.show', compact('news', 'totalMentee'));

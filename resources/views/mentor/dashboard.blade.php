@@ -43,7 +43,7 @@
                             </div>
                             <div>
                                 <p class="mb-0 text-muted">Jumlah Bimbingan</p>
-                                <h3 class="fw-semibold mb-0">3</h3>
+                                <h3 class="fw-semibold mb-0">{{$guidances->count()}}</h3>
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                             </div>
                             <div>
                                 <p class="mb-0 text-muted">Jumlah Siswa Dibimbing</p>
-                                <h3 class="fw-semibold mb-0">24</h3>
+                                <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
                             </div>
                         </div>
                     </div>
@@ -80,81 +80,47 @@
                                 <th width="5%">No</th>
                                 <th>NIS</th>
                                 <th>Nama Siswa</th>
-                                <th>Kelas</th>
-                                <th>Kehadiran Hari Ini</th>
-                              
+                                <th>Perusahaan</th>
+                                <th>Presensi</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2024001</td>
-                                <td>Ahmad Fauzi</td>
-                                <td>X RPL 1</td>
-                                <td>
-                                    <span class="badge bg-success">Hadir</span>
-                                </td>
-                                
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>2024002</td>
-                                <td>Budi Santoso</td>
-                                <td>X RPL 1</td>
-                                <td>
-                                    <span class="badge bg-danger">Tidak Hadir</span>
-                                </td>
-                                
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>2024003</td>
-                                <td>Citra Dewi</td>
-                                <td>X RPL 2</td>
-                                <td>
-                                    <span class="badge bg-warning text-dark">Izin</span>
-                                </td>
-                               
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>2024004</td>
-                                <td>Deni Kurniawan</td>
-                                <td>X RPL 2</td>
-                                <td>
-                                    <span class="badge bg-info">Sakit</span>
-                                </td>
-                                
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>2024005</td>
-                                <td>Eka Putri</td>
-                                <td>X TKJ 1</td>
-                                <td>
-                                    <span class="badge bg-success">Hadir</span>
-                                </td>
-                                
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>2024006</td>
-                                <td>Fajar Ramadhan</td>
-                                <td>X TKJ 1</td>
-                                <td>
-                                    <span class="badge bg-secondary">Belum Tercatat</span>
-                                </td>
-                               
-                            </tr>
+                            @foreach ($students as $key => $item)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $item->student->std_nis }}</td>
+                                    <td>{{ $item->student->user->name ?? '-' }}</td>
+                                    <td>{{ $item->company->cmp_name ?? '-' }}</td>
+                                 
+                                    <td>
+                                        @php
+                                            $attendance = $item->student->attendanceToday;
+                                        @endphp
+
+                                        @if (!$attendance)
+                                            <span class="badge bg-secondary">Belum Absen</span>
+                                        @elseif ($attendance->att_status == 1)
+                                            <span class="badge bg-success">Hadir</span>
+                                        @elseif ($attendance->att_status == 2)
+                                            <span class="badge bg-warning">Izin</span>
+                                        @elseif ($attendance->att_status == 3)
+                                            <span class="badge bg-info">Sakit</span>
+                                        @elseif ($attendance->att_status == 4)
+                                            <span class="badge bg-danger">Alpha</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>No</th>
                                 <th>NIS</th>
                                 <th>Nama Siswa</th>
-                                <th>Kelas</th>
-                                <th>Kehadiran Hari Ini</th>
-                            
+                                <th>Perusahaan</th>
+                                <th>Presensi</th>
+
                             </tr>
                         </tfoot>
                     </table>
