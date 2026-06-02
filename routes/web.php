@@ -199,7 +199,8 @@ Route::prefix('student')->name('student.')->group(function () {
     Route::prefix('presence')->name('presence.')->group(function () {
         Route::get('/', [PresenceController::class,'index'])->name('index');
         Route::post('/', [PresenceController::class,'store'])->name('store');
-
+        Route::post('/permission', [PresenceController::class,'storePermission'])->name('permission.store');
+        Route::post('/sick', [PresenceController::class,'storeSick'])->name('sick.store');
     });
 
 });

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('att_std_id');
             $table->date('att_date');
             $table->tinyInteger('att_status')->default(1)->comment('1=hadir, 2=izin, 3=sakit, 4=alpha');
+            $table->text('att_description')->nullable();
             $table->string('att_photo')->nullable();
             $table->decimal('att_latitude', 10, 8)->nullable();
             $table->decimal('att_longitude', 11, 8)->nullable();

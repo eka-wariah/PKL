@@ -10,7 +10,17 @@
                 <div class="card shadow-sm mb-4">
                     <div class="card-body text-center py-4">
                         <h4 class="fw-semibold mb-1">Presensi Harian</h4>
+                        <div id="jamDigital" style="font-size:30px;font-weight:700;letter-spacing:5px;">
+                            00 : 00 : 00
+                        </div>
                         <p class="text-muted mb-0" id="tanggalHari"></p>
+                        <div class="mb-2">
+                            <select class="form-select" id="jenisPresensi">
+                                <option value="hadir">Hadir</option>
+                                <option value="izin">Izin</option>
+                                <option value="sakit">Sakit</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -24,7 +34,7 @@
                     </div>
                 @endif
 
-
+                <div id="formHadir">
                 {{-- Kamera --}}
                 <div class="card shadow-sm mb-3">
                     <div class="card-body">
@@ -63,7 +73,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 {{-- Lokasi --}}
                 <div class="card shadow-sm mb-3">
                     <div class="card-body">
@@ -83,14 +93,68 @@
 
                 {{-- Tombol Submit --}}
                 <div class="d-grid mb-4">
-                    <button type="button" id="btnSubmit" class="btn btn-success btn-lg" disabled>
-                        <i class="ti ti-device-floppy me-2"></i> Kirim Presensi
+                    <button type="button" id="btnSubmit" class="btn btn-success btn-lg" {{ $already ? 'disabled' : '' }} disabled>
+                        <i class="ti ti-device-floppy me-2"></i> {{ $already ? 'Sudah Presensi Hari Ini' : 'Kirim Presensi' }}
                     </button>
                 </div>
+            </div>
+            
+            <div id="formIzin" style="display:none">
 
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+            
+                        <label class="form-label fw-semibold">
+                            Alasan Izin
+                        </label>
+            
+                        <textarea
+                            class="form-control"
+                            rows="4"
+                            placeholder="Masukkan alasan izin..."
+                            id="alasanIzin"></textarea>
+            
+                    </div>
+                </div>
+            
+                <div class="d-grid mb-4">
+                    <button type="button" id="btnIzin" class="btn btn-warning btn-lg"  {{ $already ? 'disabled' : '' }}>
+                        <i class="ti ti-send me-2"></i>   {{ $already ? 'Sudah Presensi Hari Ini' : 'Kirim Izin' }}
+                       
+                    </button>
+                </div>
+            
+            </div>
+            <div id="formSakit" style="display:none">
+
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+            
+                        <label class="form-label fw-semibold">
+                            Keterangan Sakit
+                        </label>
+            
+                        <textarea
+                            class="form-control"
+                            rows="4"
+                            placeholder="Masukkan keterangan sakit..."
+                            id="alasanSakit"></textarea>
+            
+                    </div>
+                </div>
+            
+                <div class="d-grid mb-4">
+                    <button type="button" id="btnSakit" class="btn btn-danger btn-lg" {{ $already ? 'disabled' : '' }}>
+                        <i class="ti ti-send me-2"></i>  {{ $already ? 'Sudah Presensi Hari Ini' : ' Kirim Sakit' }}
+                       
+                    </button>
+                </div>
+            
+            </div>
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('script')
@@ -114,6 +178,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSubmit   = document.getElementById('btnSubmit');
     const gpsStatus   = document.getElementById('gpsStatus');
     const lokasiInfo  = document.getElementById('lokasiInfo');
+    const jenisPresensi = document.getElementById('jenisPresensi');
+
+jenisPresensi.addEventListener('change', function () {
+
+    document.getElementById('formHadir').style.display = 'none';
+    document.getElementById('formIzin').style.display = 'none';
+    document.getElementById('formSakit').style.display = 'none';
+
+    if (this.value === 'hadir') {
+        document.getElementById('formHadir').style.display = 'block';
+    }
+
+    if (this.value === 'izin') {
+        document.getElementById('formIzin').style.display = 'block';
+    }
+
+    if (this.value === 'sakit') {
+        document.getElementById('formSakit').style.display = 'block';
+    }
+});
 
     // Tanggal
     const now = new Date();
@@ -255,8 +339,167 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const btnIzin = document.getElementById('btnIzin');
+
+if(btnIzin){
+
+    btnIzin.addEventListener('click', () => {
+
+        const alasan = document
+            .getElementById('alasanIzin')
+            .value
+            .trim();
+
+        if(!alasan){
+            Swal.fire(
+                'Peringatan',
+                'Alasan izin wajib diisi',
+                'warning'
+            );
+            return;
+        }
+
+        fetch('{{ route("student.presence.permission.store") }}', {
+
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+
+            body: JSON.stringify({
+                description: alasan
+            })
+
+        })
+        .then(r => r.json())
+        .then(data => {
+
+            if(data.success){
+
+                btnIzin.disabled = true;
+
+                Swal.fire(
+                    'Berhasil',
+                    data.message,
+                    'success'
+                ).then(() => location.reload());
+
+            }else{
+
+                Swal.fire(
+                    'Gagal',
+                    data.message,
+                    'error'
+                );
+
+            }
+
+        });
+
+    });
+
+}
+const btnSakit = document.getElementById('btnSakit');
+
+if(btnSakit){
+
+    btnSakit.addEventListener('click', () => {
+
+        const alasan = document
+            .getElementById('alasanSakit')
+            .value
+            .trim();
+
+        if(!alasan){
+            Swal.fire(
+                'Peringatan',
+                'Keterangan sakit wajib diisi',
+                'warning'
+            );
+            return;
+        }
+
+        fetch('{{ route("student.presence.sick.store") }}', {
+
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+
+            body: JSON.stringify({
+                description: alasan
+            })
+
+        })
+        .then(r => r.json())
+        .then(data => {
+
+            if(data.success){
+
+                btnSakit.disabled = true;
+
+                Swal.fire(
+                    'Berhasil',
+                    data.message,
+                    'success'
+                ).then(() => location.reload());
+
+            }else{
+
+                Swal.fire(
+                    'Gagal',
+                    data.message,
+                    'error'
+                );
+
+            }
+
+        });
+
+    });
+
+}
+
+
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function updateJam() {
+        const sekarang = new Date();
+
+        // Jam
+        let jam = String(sekarang.getHours()).padStart(2, '0');
+        let menit = String(sekarang.getMinutes()).padStart(2, '0');
+        let detik = String(sekarang.getSeconds()).padStart(2, '0');
+
+        document.getElementById('jamDigital').innerHTML =
+            `${jam} : ${menit} : ${detik}`;
+
+        // Tanggal Indonesia
+        const hari = [
+            'Minggu', 'Senin', 'Selasa', 'Rabu',
+            'Kamis', 'Jumat', 'Sabtu'
+        ];
+
+        const bulan = [
+            'Januari', 'Februari', 'Maret', 'April',
+            'Mei', 'Juni', 'Juli', 'Agustus',
+            'September', 'Oktober', 'November', 'Desember'
+        ];
+
+        const tanggal =
+            `${hari[sekarang.getDay()]}, ${sekarang.getDate()} ${bulan[sekarang.getMonth()]} ${sekarang.getFullYear()}`;
+
+        document.getElementById('tanggalHari').innerHTML = tanggal;
+    }
+
+    updateJam();
+    setInterval(updateJam, 1000);
+</script>
 
 @endpush

@@ -41,6 +41,7 @@ class PresenceController extends Controller
                 'message' => 'Kamu sudah melakukan presensi hari ini.',
             ]);
         }
+        $status = (int) $request->att_status;
 
         $request->validate([
             'foto'      => 'required|string',
@@ -70,10 +71,78 @@ class PresenceController extends Controller
             'att_address'   => $request->alamat,
             // 'att_created_by' => Auth::id(),
         ]);
-
+    
         return response()->json([
             'success' => true,
             'message' => 'Presensi berhasil dicatat.',
         ]);
     }
+    public function storePermission(Request $request)
+{
+    $student = Auth::user()->student;
+
+    $today = Carbon::today();
+
+    if (
+        Attendance::where('att_std_id', $student->std_id)
+            ->whereDate('att_date', $today)
+            ->exists()
+    ) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Kamu sudah melakukan presensi hari ini.'
+        ]);
+    }
+
+    $request->validate([
+        'description' => 'required'
+    ]);
+
+    Attendance::create([
+        'att_std_id'      => $student->std_id,
+        'att_date'        => $today,
+        'att_status'      => 2,
+        'att_description' => $request->description,
+        'att_type'        => 'masuk',
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Izin berhasil dikirim.'
+    ]);
+}
+public function storeSick(Request $request)
+{
+    $student = Auth::user()->student;
+
+    $today = Carbon::today();
+
+    if (
+        Attendance::where('att_std_id', $student->std_id)
+            ->whereDate('att_date', $today)
+            ->exists()
+    ) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Kamu sudah melakukan presensi hari ini.'
+        ]);
+    }
+
+    $request->validate([
+        'description' => 'required'
+    ]);
+
+    Attendance::create([
+        'att_std_id'      => $student->std_id,
+        'att_date'        => $today,
+        'att_status'      => 3,
+        'att_description' => $request->description,
+        'att_type'        => 'masuk',
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Laporan sakit berhasil dikirim.'
+    ]);
+}
 }
