@@ -26,4 +26,54 @@ class PresenceController extends Controller
             'presenceData' => $presenceData,
         ]);
     }
+    public function store(Request $request)
+    {
+        $student = Auth::user()->student;
+        $today   = Carbon::today();
+
+        // Cek sudah presensi hari ini
+        if (Attendance::where('att_std_id', $student->std_id)
+            ->whereDate('att_date', $today)
+            ->exists()
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kamu sudah melakukan presensi hari ini.',
+            ]);
+        }
+
+        $request->validate([
+            'foto'      => 'required|string',
+            'latitude'  => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        // // Simpan foto
+        $fotoPath = null;
+        if ($request->foto) {
+            $base64   = preg_replace('/^data:image\/\w+;base64,/', '', $request->foto);
+            $decoded  = base64_decode($base64);
+            $filename = 'presensi/' . $student->std_id . '_' . $today->format('Ymd') . '_' . time() . '.jpg';
+            Storage::disk('public')->put($filename, $decoded);
+            $fotoPath = $filename;
+        }
+        
+        Attendance::create([
+            'att_std_id'   => $student->std_id,
+            'att_date'     => $today,
+            'att_time'     => Carbon::now()->format('H:i:s'),
+            'att_status'   => 1,
+            'att_type'     => 'masuk',
+            'att_photo'    => $fotoPath,
+            'att_latitude'  => $request->latitude,
+            'att_longitude' => $request->longitude,
+            'att_address'   => $request->alamat,
+            // 'att_created_by' => Auth::id(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Presensi berhasil dicatat.',
+        ]);
+    }
 }
