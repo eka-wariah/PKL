@@ -10,6 +10,12 @@ use App\Models\MentorAssignments;
 use Illuminate\Support\Facades\Auth;
 use Carbon\CarbonPeriod;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\AttendanceReportExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Mentor;
+use Carbon\Carbon;
+
+
 
 
 
@@ -67,5 +73,24 @@ class AttendanceReportController extends Controller
         );
 
         return $pdf->stream('laporan-kehadiran.pdf');
+    }
+
+
+
+
+    public function downloadAttendance(Request $request)
+    {
+        $request->validate([
+            'month' => 'required|integer|between:1,12',
+            'year'  => 'required|integer|min:2020',
+        ]);
+        // dd($request);
+
+        $mentor   = Mentor::where('mtr_usr_id', Auth::user()->usr_id)->firstOrFail();
+        $month    = $request->month;
+        $year     = $request->year;
+        $filename = 'laporan-kehadiran-' . Carbon::create($year, $month)->format('Y-m') . '.xlsx';
+
+        return Excel::download(new AttendanceReportExport($mentor, $month, $year), $filename);
     }
 }
