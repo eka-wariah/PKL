@@ -12,7 +12,11 @@ use App\Http\Controllers\comitte\AttendanceReportController;
 use App\Http\Controllers\mentor\AttendanceReportController as MentorAttendanceReportController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\GuidanceController;
+
 // use App\Http\Controllers\mentor\AttendanceReportController as ;
+
+
+use App\Http\Controllers\Mentor\ReportController;
 
 // use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
@@ -134,6 +138,10 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
 
             Route::get('/pdf', [AttendanceReportController::class, 'pdf'])
                 ->name('pdf');
+
+            Route::get('/download', [AttendanceReportController::class, 'downloadAttendance'])
+                ->name('download');
+
         });
     });
 
@@ -198,8 +206,10 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
             Route::get('/{id}/photo/download', [GuidanceController::class, 'downloadPhoto']);
         });
         Route::prefix('report')->name('report.')->group(function () {
+
             Route::get('/', [MentorAttendanceReportController::class, 'index'])->name('index');
             Route::get('/download', [MentorAttendanceReportController::class, 'download'])->name('download');
+
 
         });
     });

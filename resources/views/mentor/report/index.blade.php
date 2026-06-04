@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('mentor.master')
 
 @section('content')
