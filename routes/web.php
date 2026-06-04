@@ -9,8 +9,11 @@ use App\Http\Controllers\comitte\TeacherController;
 use App\Http\Controllers\comitte\MajorController;
 use App\Http\Controllers\comitte\StudentController;
 use App\Http\Controllers\comitte\AttendanceReportController;
+use App\Http\Controllers\mentor\AttendanceReportController as MentorAttendanceReportController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\GuidanceController;
+// use App\Http\Controllers\mentor\AttendanceReportController as ;
+
 // use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
@@ -127,13 +130,11 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
         Route::prefix('attendance-report')->name('attendanceReport.')->group(function () {
 
             Route::get('/', [AttendanceReportController::class, 'index'])
-            ->name('index');
+                ->name('index');
 
-        Route::get('/pdf', [AttendanceReportController::class, 'pdf'])
-            ->name('pdf');
+            Route::get('/pdf', [AttendanceReportController::class, 'pdf'])
+                ->name('pdf');
         });
-
-         
     });
 
     Route::prefix('academic-years')->name('academic_years.')->group(function () {
@@ -196,6 +197,11 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
             Route::get('/{id}/export-pdf', [GuidanceController::class, 'exportPdf'])->name('guidance.export.pdf');
             Route::get('/{id}/photo/download', [GuidanceController::class, 'downloadPhoto']);
         });
+        Route::prefix('report')->name('report.')->group(function () {
+            Route::get('/', [MentorAttendanceReportController::class, 'index'])->name('index');
+            Route::get('/download', [MentorAttendanceReportController::class, 'download'])->name('download');
+
+        });
     });
 });
 Route::prefix('student')->name('student.')->group(function () {
@@ -205,11 +211,7 @@ Route::prefix('student')->name('student.')->group(function () {
         Route::post('/', [PresenceController::class, 'store'])->name('store');
         Route::post('/permission', [PresenceController::class, 'storePermission'])->name('permission.store');
         Route::post('/sick', [PresenceController::class, 'storeSick'])->name('sick.store');
-        
     });
-
-
-   
 });
 
 require __DIR__ . '/auth.php';
