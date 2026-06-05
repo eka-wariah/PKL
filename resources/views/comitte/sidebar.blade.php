@@ -127,6 +127,14 @@
               <span class="hide-menu">Bimbingan</span>
             </a>
           </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link {{ $guidanceActive }}" href="/comitte/attendance-report/"  aria-expanded="false">
+              <span>
+                <i class="ti ti-building-community"></i>
+              </span>
+              <span class="hide-menu">Laporan</span>
+            </a>
+          </li>
 
 
 

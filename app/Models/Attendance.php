@@ -13,4 +13,8 @@ class Attendance extends Model
     // const CREATED_AT = 'att_created_at';
     // const UPDATED_AT = 'att_updated_at';
     // const DELETED_AT = 'att_deleted_at';
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'att_std_id', 'std_id');
+    }
 }

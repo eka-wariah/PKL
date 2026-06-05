@@ -20,9 +20,9 @@ class GuidanceController extends Controller
 {
     public function index()
     {
-        $news = News::where('news_parent_id', null)->get();
+        $news = News::where('news_parent_id', null)->where('news_mentor_id',Auth::user()->mentor->mtr_id)->get();
         // dd($news);
-        $newsFollowUp = News::where('news_parent_id', '!=', null)->get();
+        $newsFollowUp = News::where('news_parent_id', '!=', null)->where('news_mentor_id',Auth::user()->mentor->mtr_id)->get();
         // dd($newsFollowUp);
         return view('mentor.guidance.index', compact(['news', 'newsFollowUp']));
     }

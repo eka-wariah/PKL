@@ -82,6 +82,7 @@
                                 <th>Nama Siswa</th>
                                 <th>Perusahaan</th>
                                 <th>Presensi</th>
+                                <th>Aksi</th>
 
                             </tr>
                         </thead>
@@ -110,6 +111,14 @@
                                             <span class="badge bg-danger">Alpha</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                                <a href="/mentor/student-attendance/{{$item->student->std_id}}" class="btn btn-sm btn-info" title="Presensi">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
+                                                
+                                            </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -120,6 +129,7 @@
                                 <th>Nama Siswa</th>
                                 <th>Perusahaan</th>
                                 <th>Presensi</th>
+                                <th>Aksi</th>
 
                             </tr>
                         </tfoot>
