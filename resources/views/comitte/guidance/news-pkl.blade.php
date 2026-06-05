@@ -46,10 +46,12 @@
 
         .label {
             width: 40%;
+            font-weight: bold;
         }
 
         .separator {
             width: 5%;
+            font-weight: bold;
         }
 
         .section-title {
@@ -82,16 +84,172 @@
             font-weight: bold;
             text-decoration: underline;
         }
+        .header-table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+
+    .logo-left,
+    .logo-right {
+        width: 15%;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .header-content {
+        width: 70%;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 1.2;
+       
+    }
+    /* PEMERINTAH, DINAS, YAYASAN */
+.line1,
+.line2 {
+    font-weight: bold;
+    font-size: 12pt;
+}
+
+/* NAMA SEKOLAH + AKREDITASI */
+.school-name.school-name {
+    font-size: 16pt;
+    font-weight: bold;
+}
+.accreditation {
+    font-weight: bold;
+    font-size: 13pt;
+}
+
+/* JURUSAN */
+.major {
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+/* NPSN, NSS, ALAMAT, TELP, EMAIL */
+.info,
+.address {
+    font-weight: bold;
+    font-size: 7pt;
+    margin: 0;
+    padding: 0;
+}
+.kop-line {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.line-1 {
+    height: 1px;
+    background: #000;
+}
+
+.line-2 {
+    height: 3px;
+    background: #000;
+    margin-top: 2px;
+}
+.method-label {
+    width: 35%;
+    font-weight: bold;
+    vertical-align: top;
+}
+
+.method-separator {
+    width: 5%;
+    font-weight: bold;
+    vertical-align: top;
+}
+
+.method-content {
+    vertical-align: top;
+}
+
+.method-item {
+    margin-bottom: 8px;
+}
+.checkbox {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #000;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+    .logo-left img{
+        width: 100px;
+        height: auto;
+    }
+    .logo-right img {
+        width: 125px;
+        height: auto;
+    }
     </style>
 </head>
 <body>
+    <div class="letterhead">
+        <table class="header-table">
+            <tr>
+                <td class="logo-left">
+                    <img src="{{ public_path('assets/images/logos/Coat_of_arms_of_West_Java.svg.png') }}"  alt="Logo Jabar">
+                </td>
+    
+                <td class="header-content">
+                    <div class="line1">PEMERINTAH DAERAH PROVINSI JAWA BARAT</div>
+                    <div class="line2">DINAS PENDIDIKAN</div>
+                    <div class="line2">YAYASAN MAHAPUTRA CERDAS UTAMA</div>
+    
+                    <div class="school-name">
+                        SMKS MAHAPUTRA CERDAS UTAMA
+                    </div>
+    
+                    <div class="accreditation">
+                        AKREDITASI "A"
+                    </div>
+    
+                    <div class="major">
+                        DESAIN KOMUNIKASI VISUAL
+                    </div>
+    
+                    <div class="major">
+                        PENGEMBANGAN PERANGKAT LUNAK DAN GIM
+                    </div>
+    
+                    <div class="info">
+                        NPSN : 69949896 &nbsp;&nbsp;&nbsp;
+                        NSS : 402020828126
+                    </div>
+    
+                    <div class="address">
+                        Jl. Katapang Andir, Km 4. Pasantren. Ds. Sukamukti.
+                        Kec. Katapang. Kab. Bandung Kode Pos : 40971
+                    </div>
+    
+                    <div class="address">
+                        Tlp:(022) 5893178.
+                        Email: smkmahaputracerdasutama@gmail.com
+                        Web: smkmahaputra.sch.id
+                    </div>
+                </td>
+    
+                <td class="logo-right">
+                    <img src="{{ public_path('assets/images/logos/images-removebg-preview (1).png') }}" alt="Logo Sekolah">
+                </td>
+            </tr>
+        </table>
+    
+        <div class="kop-line">
+            <div class="line-1"></div>
+            <div class="line-2"></div>
+        </div>
+    </div>
 
     <div class="title">
         BERITA ACARA BIMBINGAN PKL
     </div>
 
     <p class="intro">
-        Pada hari
+        Pada hari ini,
         <strong>{{ \Carbon\Carbon::parse($news->news_date)->translatedFormat('l') }}</strong>
         tanggal
         <strong>{{ \Carbon\Carbon::parse($news->news_date)->translatedFormat('d') }}</strong>
@@ -99,18 +257,40 @@
         <strong>{{ \Carbon\Carbon::parse($news->news_date)->translatedFormat('F') }}</strong>
         tahun
         <strong>{{ \Carbon\Carbon::parse($news->news_date)->translatedFormat('Y') }}</strong>,
-        telah dilaksanakan kegiatan bimbingan Praktik Kerja Lapangan (PKL)
-        dengan rincian sebagai berikut:
+        telah dilaksanakan kegiatan Bimbingan Praktik Kerja Lapangan (PKL) bagi siswa-siswi SMKS Mahaputra Cerdas Utama oleh Guru Pembimbing dengan rincian pelaksanaan sebagai berikut:
     </p>
 
     <table class="data-table">
-        <tr>
+        {{-- <tr>
             <td class="label">Jumlah siswa seharusnya</td>
             <td class="separator">:</td>
             <td>{{ $totalMentee }}</td>
-        </tr>
-
+        </tr> --}}
         <tr>
+            <td class="label">Waktu Pelaksanaan</td>
+            <td class="separator">:</td>
+            <td>{{ \Carbon\Carbon::parse($news->news_date)->translatedFormat('l, d F Y') }}</td>
+        </tr>
+        <tr>
+            <td class="label">Tempat/Media Bimbingan</td>
+            <td class="separator">:</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="label"><b>Metode Pelaksanaan</b></td>
+            <td class="separator"><b>:</b></td>
+            <td>
+                <span style="border:1px solid #000; padding:0 5px;">&nbsp;</span>
+                Luring (Tatap Muka)<br>
+            
+                <span style="border:1px solid #000; padding:0 5px;">&nbsp;</span>
+                Daring (Online)<br>
+            
+                <span style="border:1px solid #000; padding:0 5px;">&nbsp;</span>
+                Hybrid (Kombinasi)
+            </td>
+        </tr>
+        {{-- <tr>
             <td class="label">Jumlah siswa hadir</td>
             <td class="separator">:</td>
             <td>{{ $news->participants->count() }}</td>
@@ -120,11 +300,12 @@
             <td class="label">Jumlah siswa tidak hadir</td>
             <td class="separator">:</td>
             <td>{{ $totalMentee - $news->participants->count() }}</td>
-        </tr>
+        </tr> --}}
     </table>
+    
 
     <div class="section-title">
-        Siswa yang Tidak Hadir
+        Daftar siswa yang tidak mengikuti bimbingan:
     </div>
 
     <div class="content-box">
@@ -137,12 +318,18 @@
             -
         @endforelse
     </div>
+    <p class="intro">
+        Demikian Berita Acara Pelaksanaan Bimbingan ini dibuat dengan sebenar-benarnya untuk digunakan
+sebagaimana mestinya sebagai bukti otentik pelaksanaan supervisi dan bimbingan PKL.
+    </p>
 
-    <div class="section-title">
+
+    {{-- <div class="section-title">
         Isi Bimbingan
     </div>
+     --}}
 
-    <div class="content-box">
+    {{-- <div class="content-box">
         {!! nl2br(e($news->news_guidance_material ?? '-')) !!}
     </div>
 
@@ -160,7 +347,7 @@
 
     <div class="content-box">
         {!! nl2br(e($news->news_note ?? '-')) !!}
-    </div>
+    </div> --}}
 
     <table class="signature-table">
         <tr>
@@ -181,13 +368,13 @@
         <tr>
             <td>
                 <span class="name">
-                    {{ auth()->user()->name }}
+                    ({{ auth()->user()->name }})
                 </span>
             </td>
 
             <td>
                 <span class="name">
-                    {{ $news->mentor->user->name ?? '-' }}
+                    ({{ $news->mentor->user->name ?? '-' }})
                 </span>
             </td>
         </tr>

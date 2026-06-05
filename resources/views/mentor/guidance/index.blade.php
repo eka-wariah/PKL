@@ -96,17 +96,17 @@
                                                     data-download="/mentor/guidance/{{$news->news_id}}/photo/download">
                                                     <i class="ti ti-photo"></i>
                                                 </button> 
-                                                <a href="#" class="btn btn-sm btn-warning" title="Edit">
+                                                {{-- <a href="#" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="ti ti-edit"></i>
-                                                </a> 
+                                                </a>  --}}
                                                 <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
                                                     title="Buat Bimbingan Susulan">
                                                     <i class="ti ti-calendar-plus"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                                {{-- <button type="button" class="btn btn-sm btn-danger" title="Hapus"
                                                     onclick="confirmDelete(1)">
                                                     <i class="ti ti-trash"></i>
-                                                </button>
+                                                </button> --}}
                                                 
                                             </div>
                                         </td>
@@ -155,17 +155,17 @@
                                                 <a href="/mentor/guidance/{{$news->news_id}}/show" class="btn btn-sm btn-info" title="Detail">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-sm btn-warning" title="Edit">
+                                                {{-- <a href="#" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="ti ti-edit"></i>
-                                                </a>
+                                                </a> --}}
                                                 <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
                                                     title="Buat Bimbingan Susulan">
                                                     <i class="ti ti-calendar-plus"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                                {{-- <button type="button" class="btn btn-sm btn-danger" title="Hapus"
                                                     onclick="confirmDelete(1)">
                                                     <i class="ti ti-trash"></i>
-                                                </button>
+                                                </button> --}}
                                             </div>
                                         </td>
                                     </tr>

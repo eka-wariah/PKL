@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 
@@ -62,6 +62,7 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
             Route::post('/{id}/mentee/create', [TeacherController::class, 'storeMentee'])->name('mentee.store');
             Route::get('/import', [TeacherController::class, 'importPage'])->name('importPage');
             Route::post('/import', [TeacherController::class, 'import'])->name('import');
+            Route::get('/{id}/guidance', [ComitteGuidanceController::class, 'index'])->name('index');
             Route::resource('/', TeacherController::class);
         });
         Route::prefix('student')->name('student.')->group(function () {
@@ -120,7 +121,7 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
         });
         Route::prefix('guidance')->name('guidance.')->group(function () {
 
-            Route::get('/', [ComitteGuidanceController::class, 'index'])->name('index');
+            Route::get('/{id}', [ComitteGuidanceController::class, 'index'])->name('index');
             Route::get('/{id}/show', [ComitteGuidanceController::class, 'show'])->name('show');
             Route::get('/{id}/export-pdf',[ComitteGuidanceController::class, 'exportPdf'])->name('export.pdf');
             Route::get('/{id}/photo/download',[ComitteGuidanceController::class, 'downloadPhoto']);
