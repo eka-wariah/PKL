@@ -212,6 +212,10 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
 
 
         });
+        Route::prefix('student-attendance')->name('studentAttendance.')->group(function () {
+            Route::get('/{id}', [MentorDashboardController::class, 'studentAttendance'])->name('attendance');
+
+        });
     });
 });
 Route::prefix('student')->name('student.')->group(function () {
