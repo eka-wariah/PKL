@@ -8,16 +8,8 @@ use App\Http\Controllers\comitte\GuidanceController as ComitteGuidanceController
 use App\Http\Controllers\comitte\TeacherController;
 use App\Http\Controllers\comitte\MajorController;
 use App\Http\Controllers\comitte\StudentController;
-use App\Http\Controllers\comitte\AttendanceReportController;
-use App\Http\Controllers\mentor\AttendanceReportController as MentorAttendanceReportController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\GuidanceController;
-
-// use App\Http\Controllers\mentor\AttendanceReportController as ;
-
-
-use App\Http\Controllers\Mentor\ReportController;
-
 // use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
@@ -33,13 +25,15 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     // dd(Auth::user()->hasRole('mentor') );
-    if (Auth::user()->hasRole('comitte')) {
-        return redirect(route('comitte.index'));
-    } else if (Auth::user()->hasRole('mentor')) {
-        return redirect(route('mentor.index'));
-    } else {
-        return redirect(route('student.index'));
+    if(Auth::user()->hasRole('comitte')){
+       return redirect(route('comitte.index'));
+    }else if(Auth::user()->hasRole('mentor')){
+       return redirect(route('mentor.index'));
+    }else{
+       return redirect(route('student.index'));
+
     }
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -68,7 +62,7 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
             Route::post('/{id}/mentee/create', [TeacherController::class, 'storeMentee'])->name('mentee.store');
             Route::get('/import', [TeacherController::class, 'importPage'])->name('importPage');
             Route::post('/import', [TeacherController::class, 'import'])->name('import');
-            Route::get('/{id}/guidance', [ComitteGuidanceController::class, 'index'])->name('index');
+            Route::get('/{id}/guidance', [TeacherController::class, 'teachguidance'])->name('teachguidance');
             Route::resource('/', TeacherController::class);
         });
         Route::prefix('student')->name('student.')->group(function () {
@@ -127,22 +121,10 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
         });
         Route::prefix('guidance')->name('guidance.')->group(function () {
 
-            Route::get('/{id}', [ComitteGuidanceController::class, 'index'])->name('index');
+            Route::get('/', [ComitteGuidanceController::class, 'index'])->name('index');
             Route::get('/{id}/show', [ComitteGuidanceController::class, 'show'])->name('show');
-            Route::get('/{id}/export-pdf', [ComitteGuidanceController::class, 'exportPdf'])->name('export.pdf');
-            Route::get('/{id}/photo/download', [ComitteGuidanceController::class, 'downloadPhoto']);
-        });
-        Route::prefix('attendance-report')->name('attendanceReport.')->group(function () {
-
-            Route::get('/', [AttendanceReportController::class, 'index'])
-                ->name('index');
-
-            Route::get('/pdf', [AttendanceReportController::class, 'pdf'])
-                ->name('pdf');
-
-            Route::get('/download', [AttendanceReportController::class, 'downloadAttendance'])
-                ->name('download');
-
+            Route::get('/{id}/export-pdf',[ComitteGuidanceController::class, 'exportPdf'])->name('export.pdf');
+            Route::get('/{id}/photo/download',[ComitteGuidanceController::class, 'downloadPhoto']);
         });
     });
 
@@ -188,6 +170,8 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
         Route::get('/{id}/detail', [CompanyController::class, 'detail'])->name('detail');
         Route::delete('/{id}/destroy', [CompanyController::class, 'destroy'])->name('destroy');
     });
+
+
 });
 
 
@@ -203,30 +187,23 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
             Route::get('/{id}/follow-up', [GuidanceController::class, 'followUp'])->name('followUp');
             Route::post('/{id}/follow-up', [GuidanceController::class, 'followUpStore'])->name('followUpStore');
             // Route::get('/{id}/export-word',[GuidanceController::class, 'exportWord'])->name('guidance.export.word');
-            Route::get('/{id}/export-pdf', [GuidanceController::class, 'exportPdf'])->name('guidance.export.pdf');
-            Route::get('/{id}/photo/download', [GuidanceController::class, 'downloadPhoto']);
-        });
-        Route::prefix('report')->name('report.')->group(function () {
-
-            Route::get('/', [MentorAttendanceReportController::class, 'index'])->name('index');
-            Route::get('/download', [MentorAttendanceReportController::class, 'download'])->name('download');
+            Route::get('/{id}/export-pdf',[GuidanceController::class, 'exportPdf'])->name('guidance.export.pdf');
+            Route::get('/{id}/photo/download',[GuidanceController::class, 'downloadPhoto']);
 
 
         });
-        Route::prefix('student-attendance')->name('studentAttendance.')->group(function () {
-            Route::get('/{id}', [MentorDashboardController::class, 'studentAttendance'])->name('attendance');
 
-        });
     });
 });
 Route::prefix('student')->name('student.')->group(function () {
     Route::get('/', [StudentDashboardController::class, 'index'])->name('index');
     Route::prefix('presence')->name('presence.')->group(function () {
-        Route::get('/', [PresenceController::class, 'index'])->name('index');
-        Route::post('/', [PresenceController::class, 'store'])->name('store');
-        Route::post('/permission', [PresenceController::class, 'storePermission'])->name('permission.store');
-        Route::post('/sick', [PresenceController::class, 'storeSick'])->name('sick.store');
+        Route::get('/', [PresenceController::class,'index'])->name('index');
+        Route::post('/', [PresenceController::class,'store'])->name('store');
+        Route::post('/permission', [PresenceController::class,'storePermission'])->name('permission.store');
+        Route::post('/sick', [PresenceController::class,'storeSick'])->name('sick.store');
     });
+
 });
 
 require __DIR__ . '/auth.php';
