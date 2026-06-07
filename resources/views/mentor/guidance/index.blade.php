@@ -43,8 +43,8 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link d-flex align-items-center gap-2" id="susulan-tab"
-                            data-bs-toggle="tab" data-bs-target="#susulan" type="button" role="tab">
+                        <button class="nav-link d-flex align-items-center gap-2" id="susulan-tab" data-bs-toggle="tab"
+                            data-bs-target="#susulan" type="button" role="tab">
                             <i class="ti ti-book-2"></i> Bimbingan Susulan
                         </button>
                     </li>
@@ -61,8 +61,7 @@
                             </a>
                         </div>
                         <div class="table-responsive">
-                            <table id="table_reguler"
-                                class="table w-100 table-striped table-bordered display text-nowrap">
+                            <table id="table_reguler" class="table w-100 table-striped table-bordered display text-nowrap">
                                 <thead>
                                     <tr>
                                         <th width="5%">No</th>
@@ -72,45 +71,52 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  
-                                    
 
-                                    @foreach ($news as $no=>$news)
+
+
+                                    @foreach ($news as $no => $news)
                                         <tr>
-                                        <td>{{$loop->iteration ??' -'}}</td>
-                                        <td>{{$news->news_week_number ?? '-'}}</td>
-                                        <td>{{$news->news_date?? '-'}}</td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <a href="/mentor/guidance/{{$news->news_id}}/show" class="btn btn-sm btn-info" title="Detail">
-                                                    <i class="ti ti-eye"></i>
-                                                </a>
-                                                <a href="/mentor/guidance/{{$news->news_id}}/export-pdf" class="btn btn-sm btn-success" title="Download Berita Acara">
-                                                    <i class="ti ti-book-download"></i>
-                                                </a>
-                                                <button type="button"
-                                                    class="btn btn-sm btn-primary preview-image"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#imageModal"
-                                                    data-image="{{ Storage::url($news->news_image) }}"
-                                                    data-download="/mentor/guidance/{{$news->news_id}}/photo/download">
-                                                    <i class="ti ti-photo"></i>
-                                                </button> 
-                                                <a href="#" class="btn btn-sm btn-warning" title="Edit">
-                                                    <i class="ti ti-edit"></i>
-                                                </a> 
-                                                <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
-                                                    title="Buat Bimbingan Susulan">
-                                                    <i class="ti ti-calendar-plus"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus"
-                                                    onclick="confirmDelete(1)">
-                                                    <i class="ti ti-trash"></i>
-                                                </button>
-                                                
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            <td>{{ $loop->iteration ?? ' -' }}</td>
+                                            <td>{{ $news->news_week_number ?? '-' }}</td>
+                                            <td>{{ $news->news_date ?? '-' }}</td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    @if ($news->news_ended != 0)
+                                                        <a href="/mentor/guidance/{{ $news->news_id }}/show"
+                                                            class="btn btn-sm btn-info" title="Detail">
+                                                            <i class="ti ti-eye"></i>
+                                                        </a>
+                                                        <a href="/mentor/guidance/{{ $news->news_id }}/export-pdf"
+                                                            class="btn btn-sm btn-success" title="Download Berita Acara">
+                                                            <i class="ti ti-book-download"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-sm btn-primary preview-image"
+                                                            data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                            data-image="{{ Storage::url($news->news_image) }}"
+                                                            data-download="/mentor/guidance/{{ $news->news_id }}/photo/download">
+                                                            <i class="ti ti-photo"></i>
+                                                        </button>
+                                                        <a href="#" class="btn btn-sm btn-warning" title="Edit">
+                                                            <i class="ti ti-edit"></i>
+                                                        </a>
+                                                        <a href="/mentor/guidance/{{ $news->news_id }}/follow-up"
+                                                            class="btn btn-sm btn-secondary" title="Buat Bimbingan Susulan">
+                                                            <i class="ti ti-calendar-plus"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                                            onclick="confirmDelete(1)">
+                                                            <i class="ti ti-trash"></i>
+                                                        </button>
+                                                    @else
+                                                        <a href="/mentor/guidance/{{ $news->news_id }}/finish"
+                                                            class="btn btn-sm btn-success" title="Selesaikan">
+                                                            <i class="ti ti-check"></i>
+                                                        </a>
+                                                    @endif
+
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
@@ -134,8 +140,7 @@
                             </a>
                         </div>
                         <div class="table-responsive">
-                            <table id="table_susulan"
-                                class="table w-100 table-striped table-bordered display text-nowrap">
+                            <table id="table_susulan" class="table w-100 table-striped table-bordered display text-nowrap">
                                 <thead>
                                     <tr>
                                         <th width="5%">No</th>
@@ -145,30 +150,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                     @foreach ($newsFollowUp as $no=>$news)
+                                    @foreach ($newsFollowUp as $no => $news)
                                         <tr>
-                                        <td>{{$loop->iteration ??' -'}}</td>
-                                        <td>{{$news->newsParent->news_week_number ?? '-'}}</td>
-                                        <td>{{$news->news_date?? '-'}}</td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <a href="/mentor/guidance/{{$news->news_id}}/show" class="btn btn-sm btn-info" title="Detail">
-                                                    <i class="ti ti-eye"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-sm btn-warning" title="Edit">
-                                                    <i class="ti ti-edit"></i>
-                                                </a>
-                                                <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
-                                                    title="Buat Bimbingan Susulan">
-                                                    <i class="ti ti-calendar-plus"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus"
-                                                    onclick="confirmDelete(1)">
-                                                    <i class="ti ti-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            <td>{{ $loop->iteration ?? ' -' }}</td>
+                                            <td>{{ $news->newsParent->news_week_number ?? '-' }}</td>
+                                            <td>{{ $news->news_date ?? '-' }}</td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <a href="/mentor/guidance/{{ $news->news_id }}/show"
+                                                        class="btn btn-sm btn-info" title="Detail">
+                                                        <i class="ti ti-eye"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm btn-warning" title="Edit">
+                                                        <i class="ti ti-edit"></i>
+                                                    </a>
+                                                    <a href="/mentor/guidance/{{ $news->news_id }}/follow-up"
+                                                        class="btn btn-sm btn-secondary" title="Buat Bimbingan Susulan">
+                                                        <i class="ti ti-calendar-plus"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                                        onclick="confirmDelete(1)">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
@@ -197,32 +203,23 @@
                     Preview Foto Bimbingan
                 </h5>
 
-                <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
 
             <div class="modal-body text-center">
 
-                <img id="previewImage"
-                    src=""
-                    class="img-fluid rounded shadow"
-                    style="max-height:700px;">
+                <img id="previewImage" src="" class="img-fluid rounded shadow" style="max-height:700px;">
 
             </div>
 
             <div class="modal-footer">
 
-                <button type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Kembali
                 </button>
 
-                <a href="#"
-                    id="downloadBtn"
-                    class="btn btn-success">
+                <a href="#" id="downloadBtn" class="btn btn-success">
                     <i class="ti ti-download"></i>
                     Download
                 </a>
@@ -269,14 +266,14 @@
             }
         }
     </script>
-     <script>
+    <script>
         $('.preview-image').click(function() {
 
-        let image = $(this).data('image');
-        let download = $(this).data('download');
+            let image = $(this).data('image');
+            let download = $(this).data('download');
 
-        $('#previewImage').attr('src', image);
-        $('#downloadBtn').attr('href', download);
+            $('#previewImage').attr('src', image);
+            $('#downloadBtn').attr('href', download);
 
         });
     </script>

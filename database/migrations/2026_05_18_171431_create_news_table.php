@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('news_academic_year')->references('acy_id')->on('academic_years')->onDelete('cascade');
             $table->date('news_date')->nullable();
             $table->time('news_start')->nullable();
+            $table->integer('news_method')->nullable()->comment('1=offline, 2=online, 3=hybrid');
+            $table->string('news_place')->nullable();
             $table->time('news_ended')->nullable();
             $table->string('news_document_number')->nullable();
             $table->string('news_week_number')->nullable();

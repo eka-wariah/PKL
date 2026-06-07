@@ -196,8 +196,11 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
         Route::prefix('guidance')->name('guidance.')->group(function () {
 
             Route::get('/', [GuidanceController::class, 'index'])->name('index');
-            Route::get('/create', [GuidanceController::class, 'create'])->name('create');
-            Route::post('/create', [GuidanceController::class, 'store'])->name('store');
+            Route::get('/create', [GuidanceController::class, 'guidanceStart'])->name('guidanceStart');
+            Route::post('/create', [GuidanceController::class, 'guidanceStartStore'])->name('guidanceStartStore');
+            Route::get('/{id}/finish', [GuidanceController::class, 'finish'])->name('finish');
+
+            Route::put('/{id}/finish', [GuidanceController::class, 'finishStore'])->name('finishStore');
             Route::get('/{id}/show', [GuidanceController::class, 'show'])->name('show');
             Route::get('/{id}/follow-up', [GuidanceController::class, 'followUp'])->name('followUp');
             Route::post('/{id}/follow-up', [GuidanceController::class, 'followUpStore'])->name('followUpStore');

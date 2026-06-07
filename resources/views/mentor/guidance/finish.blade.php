@@ -7,7 +7,7 @@
 @endpush
 
 @section('title')
-    SiMAPUT | Tambah Bimbingan
+    SiMAPUT | Selesaikan Bimbingan
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
                                 <li class="breadcrumb-item">
                                     <a href="/mentor/bimbingan">Daftar Bimbingan</a>
                                 </li>
-                                <li class="breadcrumb-item active" aria-current="page">Tambah Bimbingan</li>
+                                <li class="breadcrumb-item active" aria-current="page">Selesaikan Bimbingan</li>
                             </ol>
                         </nav>
                     </div>
@@ -39,10 +39,28 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-4 d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Tambah Bimbingan</h4>
+                    <h4 class="card-title mb-0">Selesaikan Bimbingan</h4>
                     <a href="/mentor/bimbingan" class="btn btn-secondary">
                         <i class="ti ti-arrow-left me-1"></i> Kembali
                     </a>
+                </div>
+
+                {{-- Info Bimbingan --}}
+                <div class="alert alert-info mb-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <small class="text-muted">Minggu Ke</small>
+                            <p class="fw-semibold mb-0">{{ $news->news_week_number }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted">Metode</small>
+                            <p class="fw-semibold mb-0 text-capitalize">{{ str_replace('_', ' ', $news->news_method) }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted">Tempat</small>
+                            <p class="fw-semibold mb-0">{{ $news->news_place }}</p>
+                        </div>
+                    </div>
                 </div>
 
                 @if ($errors->any())
@@ -55,30 +73,18 @@
                     </div>
                 @endif
 
-                <form action="{{ route('mentor.guidance.store') }}" id="guidanceForm" method="POST">
+                <form action="{{ route('mentor.guidance.finish', $news->news_id) }}" id="finishForm" method="POST">
                     @csrf
+                    @method('PUT')
 
-                    {{-- Minggu & Jam --}}
+                    {{-- Jam Selesai --}}
                     <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Bimbingan Minggu Ke</label>
-                            <input type="number" class="form-control bg-light"
-                                name="news_week_number" value="{{ $weekNumber }}" readonly>
-                            <small class="text-muted">Dihitung otomatis oleh sistem.</small>
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Jam Mulai</label>
+                            <input type="text" class="form-control bg-light"
+                                value="{{ \Carbon\Carbon::parse($news->news_start)->format('H:i') }}" readonly>
                         </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Jam Mulai <span class="text-danger">*</span>
-                            </label>
-                            <input type="time" class="form-control @error('news_start') is-invalid @enderror"
-                                name="news_start" value="{{ old('news_start') }}">
-                            @error('news_start')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 Jam Selesai <span class="text-danger">*</span>
                             </label>
@@ -87,7 +93,7 @@
                             @error('news_ended')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
                     </div>
 
                     {{-- Siswa Hadir --}}
@@ -131,7 +137,6 @@
                             </div>
 
                             <canvas id="fotoCanvas" style="display:none;"></canvas>
-
                             <input type="hidden" name="news_image" id="fotoDokumentasi">
 
                             <div class="d-flex gap-2 mt-3">
@@ -145,7 +150,6 @@
                                     <i class="ti ti-refresh me-1"></i> Ulangi
                                 </button>
                             </div>
-
                             <small class="text-muted d-block mt-2">Foto dokumentasi kegiatan bimbingan (opsional).</small>
                         </div>
                     </div>
@@ -186,9 +190,9 @@
                     </div>
 
                     <div class="d-flex gap-2 justify-content-end">
-                        <a href="/mentor/bimbingan" class="btn btn-secondary" >Batal</a>
-                        <button type="button" class="btn btn-primary" id="btnSave">
-                            <i class="ti ti-device-floppy me-1"></i> Simpan
+                        <a href="/mentor/bimbingan" class="btn btn-secondary">Batal</a>
+                        <button type="button" class="btn btn-success" id="btnFinish">
+                            <i class="ti ti-check me-1"></i> Selesaikan Bimbingan
                         </button>
                     </div>
                 </form>
@@ -199,6 +203,7 @@
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
             $('#siswaHadir').select2({
@@ -207,10 +212,9 @@
                 allowClear: true,
             });
         });
-    </script>
-    <script>
-        let kameraStream = null;
 
+        // kamera
+        let kameraStream = null;
         const video       = document.getElementById('kameraPreview');
         const canvas      = document.getElementById('fotoCanvas');
         const preview     = document.getElementById('fotoPreview');
@@ -223,18 +227,15 @@
 
         btnBuka.addEventListener('click', async function() {
             try {
-                kameraStream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' }
-                });
+                kameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
                 video.srcObject = kameraStream;
-                video.style.display      = 'block';
+                video.style.display       = 'block';
                 placeholder.style.display = 'none';
                 previewWrap.style.display = 'none';
-                btnBuka.style.display    = 'none';
-                btnAmbil.style.display   = 'inline-block';
+                btnBuka.style.display     = 'none';
+                btnAmbil.style.display    = 'inline-block';
             } catch (err) {
                 alert('Tidak bisa mengakses kamera.');
-                console.error(err);
             }
         });
 
@@ -242,11 +243,9 @@
             canvas.width  = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
-
-            const base64   = canvas.toDataURL('image/jpeg', 0.85);
+            const base64    = canvas.toDataURL('image/jpeg', 0.85);
             inputFoto.value = base64;
             preview.src     = base64;
-
             kameraStream.getTracks().forEach(t => t.stop());
             video.style.display       = 'none';
             previewWrap.style.display = 'block';
@@ -262,22 +261,22 @@
             btnRetake.style.display   = 'none';
             btnBuka.style.display     = 'inline-block';
         });
-    </script>
-    <script>
-    document.getElementById('btnSave').addEventListener('click', function () {
-        Swal.fire({
-            title: 'Konfirmasi',
-            text: 'Yakin ingin menyimpan data ini?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Simpan',
-            cancelButtonText: 'Batal',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('guidanceForm').submit();
-            }
+
+        // konfirmasi selesai
+        document.getElementById('btnFinish').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Selesaikan Bimbingan?',
+                text: 'Pastikan semua data sudah terisi dengan benar.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Selesaikan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#198754',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('finishForm').submit();
+                }
+            });
         });
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </script>
 @endpush
