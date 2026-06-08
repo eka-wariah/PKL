@@ -93,8 +93,15 @@
 
                 {{-- Tombol Submit --}}
                 <div class="d-grid mb-4">
-                    <button type="button" id="btnSubmit" class="btn btn-success btn-lg" {{ $already ? 'disabled' : '' }} disabled>
-                        <i class="ti ti-device-floppy me-2"></i> {{ $already ? 'Sudah Presensi Hari Ini' : 'Kirim Presensi' }}
+                    <button type="button" id="btnSubmit" class="btn btn-success btn-lg" {{ (!$canPresence || $already) ? 'disabled' : '' }} disabled>
+                        <i class="ti ti-device-floppy me-2"></i>
+                        @if(!$canPresence)
+                            Presensi Ditutup
+                        @elseif($already)
+                            Sudah Presensi Hari Ini
+                        @else
+                            Kirim Presensi
+                        @endif
                     </button>
                 </div>
             </div>
@@ -118,8 +125,15 @@
                 </div>
             
                 <div class="d-grid mb-4">
-                    <button type="button" id="btnIzin" class="btn btn-warning btn-lg"  {{ $already ? 'disabled' : '' }}>
-                        <i class="ti ti-send me-2"></i>   {{ $already ? 'Sudah Presensi Hari Ini' : 'Kirim Izin' }}
+                    <button type="button" id="btnIzin" class="btn btn-warning btn-lg"  {{ (!$canPresence || $already) ? 'disabled' : '' }}>
+                        <i class="ti ti-send me-2"></i>
+                        @if(!$canPresence)
+                        Presensi Ditutup
+                    @elseif($already)
+                        Sudah Presensi Hari Ini
+                    @else
+                        Kirim Presensi
+                    @endif
                        
                     </button>
                 </div>
@@ -144,8 +158,15 @@
                 </div>
             
                 <div class="d-grid mb-4">
-                    <button type="button" id="btnSakit" class="btn btn-danger btn-lg" {{ $already ? 'disabled' : '' }}>
-                        <i class="ti ti-send me-2"></i>  {{ $already ? 'Sudah Presensi Hari Ini' : ' Kirim Sakit' }}
+                    <button type="button" id="btnSakit" class="btn btn-danger btn-lg" {{ (!$canPresence || $already) ? 'disabled' : '' }}>
+                        <i class="ti ti-send me-2"></i>
+                        @if(!$canPresence)
+                        Presensi Ditutup
+                    @elseif($already)
+                        Sudah Presensi Hari Ini
+                    @else
+                        Kirim Presensi
+                    @endif
                        
                     </button>
                 </div>
@@ -179,6 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const gpsStatus   = document.getElementById('gpsStatus');
     const lokasiInfo  = document.getElementById('lokasiInfo');
     const jenisPresensi = document.getElementById('jenisPresensi');
+    const canPresence = @json($canPresence);
+    const already = @json($already);
 
 jenisPresensi.addEventListener('change', function () {
 
@@ -290,6 +313,10 @@ jenisPresensi.addEventListener('change', function () {
     }
 
     function cekSiapSubmit() {
+        if (!canPresence || already) {
+        btnSubmit.disabled = true;
+        return;
+    }
         btnSubmit.disabled = !(fotoOk && lokasiOk);
     }
 

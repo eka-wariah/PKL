@@ -76,6 +76,7 @@
 
                                     @foreach ($news as $no => $news)
                                         <tr>
+
                                             <td>{{ $loop->iteration ?? ' -' }}</td>
                                             <td>{{ $news->news_week_number ?? '-' }}</td>
                                             <td>{{ $news->news_date ?? '-' }}</td>
@@ -117,6 +118,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+
                                     @endforeach
                                 </tbody>
                                 <tfoot>
@@ -152,6 +154,7 @@
                                 <tbody>
                                     @foreach ($newsFollowUp as $no => $news)
                                         <tr>
+<<<<<<< HEAD
                                             <td>{{ $loop->iteration ?? ' -' }}</td>
                                             <td>{{ $news->newsParent->news_week_number ?? '-' }}</td>
                                             <td>{{ $news->news_date ?? '-' }}</td>
@@ -175,6 +178,30 @@
                                                 </div>
                                             </td>
                                         </tr>
+=======
+                                        <td>{{$loop->iteration ??' -'}}</td>
+                                        <td>{{$news->newsParent->news_week_number ?? '-'}}</td>
+                                        <td>{{$news->news_date?? '-'}}</td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <a href="/mentor/guidance/{{$news->news_id}}/show" class="btn btn-sm btn-info" title="Detail">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
+                                                {{-- <a href="#" class="btn btn-sm btn-warning" title="Edit">
+                                                    <i class="ti ti-edit"></i>
+                                                </a> --}}
+                                                <a href="/mentor/guidance/{{$news->news_id}}/follow-up" class="btn btn-sm btn-secondary"
+                                                    title="Buat Bimbingan Susulan">
+                                                    <i class="ti ti-calendar-plus"></i>
+                                                </a>
+                                                {{-- <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                                    onclick="confirmDelete(1)">
+                                                    <i class="ti ti-trash"></i>
+                                                </button> --}}
+                                            </div>
+                                        </td>
+                                    </tr>
+>>>>>>> 77c73972b391eba7ee3f04105400f3b535deaa60
                                     @endforeach
                                 </tbody>
                                 <tfoot>

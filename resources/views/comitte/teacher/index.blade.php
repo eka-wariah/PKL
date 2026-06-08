@@ -71,6 +71,8 @@
                                     <td>
                                         <a href="/comitte/teacher/{{ $item->usr_id }}/mentee" class="btn btn-info"><i
                                                 class="ti ti-user"></i></a>
+                                        <a href="/comitte/teacher/{{ $item->usr_id }}/guidance" class="btn btn-info"><i
+                                            class="ti ti-user"></i></a>
                                         <a href="/comitte/teacher/{{ $item->usr_id }}/edit" class="btn btn-primary"><i
                                                 class="ti ti-edit"></i></a>
                                         <a href="/comitte/teacher/{{ $item->usr_id }}/edit-password"

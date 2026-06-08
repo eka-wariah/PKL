@@ -42,7 +42,7 @@
                                     class="btn btn-warning btn-sm">
                                     <i class="ti ti-edit me-1"></i> Edit
                                 </a> --}}
-                                <a href="/comitte/guidance/" class="btn btn-secondary btn-sm">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm">
                                     <i class="ti ti-arrow-left me-1"></i> Kembali
                                 </a>
                             </div>

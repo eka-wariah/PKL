@@ -20,16 +20,28 @@ class PresenceController extends Controller
         $presenceData = Attendance::where('att_std_id', $student->std_id)
             ->whereDate('att_date', $today)
             ->first();
+        $canPresence = now()->format('H:i') >= '06:00'
+            && now()->format('H:i') < '12:00';
         return view('student.presence.index', [
             'student'      => $student,
             'already'      => (bool) $presenceData,
             'presenceData' => $presenceData,
+            'canPresence' => $canPresence,
         ]);
     }
     public function store(Request $request)
     {
         $student = Auth::user()->student;
         $today   = Carbon::today();
+
+        $currentTime = now()->format('H:i');
+
+        if ($currentTime < '06:00' || $currentTime >= '12:00') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Presensi hanya dapat dilakukan pukul 06:00 - 12:00.'
+            ]);
+        }
 
         // Cek sudah presensi hari ini
         if (Attendance::where('att_std_id', $student->std_id)
@@ -82,6 +94,14 @@ class PresenceController extends Controller
     $student = Auth::user()->student;
 
     $today = Carbon::today();
+    $currentTime = now()->format('H:i');
+
+if ($currentTime < '06:00' || $currentTime >= '12:00') {
+    return response()->json([
+        'success' => false,
+        'message' => 'Presensi hanya dapat dilakukan pukul 06:00 - 12:00.'
+    ]);
+}
 
     if (
         Attendance::where('att_std_id', $student->std_id)
@@ -116,6 +136,14 @@ public function storeSick(Request $request)
     $student = Auth::user()->student;
 
     $today = Carbon::today();
+    $currentTime = now()->format('H:i');
+
+    if ($currentTime < '06:00' || $currentTime >= '12:00') {
+        return response()->json([
+            'success' => false,
+            'message' => 'Presensi hanya dapat dilakukan pukul 06:00 - 12:00.'
+        ]);
+    }
 
     if (
         Attendance::where('att_std_id', $student->std_id)

@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class GuidanceController extends Controller
@@ -15,13 +16,13 @@ class GuidanceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        $news = News::where('news_parent_id', null)->get();
+        $news = News::where('news_parent_id', null)->where('news_mentor_id',Auth::user($id))->get();
         // dd($news);
-        $newsFollowUp = News::where('news_parent_id', '!=', null)->get();
+        $newsFollowUp = News::where('news_parent_id', '!=', null)->where('news_mentor_id',Auth::user($id))->get();
         // dd($newsFollowUp);
-        return view('comitte.guidance.index', compact(['news', 'newsFollowUp']));
+        return view('mentor.guidance.index', compact(['news', 'newsFollowUp']));
     }
 
     /**
@@ -93,9 +94,10 @@ class GuidanceController extends Controller
         compact('news', 'totalMentee', 'absentStudents')
     )->setPaper('a4', 'portrait');
 
-    return $pdf->download(
-        'berita-acara.pdf'
-    );
+    // return $pdf->download(
+    //     'berita-acara.pdf'
+    // );
+    return $pdf->stream('berita-acara.pdf');
 }
 public function downloadPhoto($id)
 {

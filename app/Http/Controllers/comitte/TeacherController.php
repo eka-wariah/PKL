@@ -13,8 +13,8 @@ use App\Models\MentorAssignments;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Imports\MentorImport;
-
-
+use App\Models\News;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
@@ -205,5 +205,22 @@ class TeacherController extends Controller
         Alert::success('Berhasil Import', 'Data Guru Berhasil Diimport');
         return redirect()->route('comitte.teacher.index')
             ->with('success', 'Data guru berhasil diimport.');
+    }
+    public function teachguidance($id)
+    {
+        
+    $mentor = Mentor::where('mtr_usr_id', $id)->firstOrFail();
+
+    $news = News::whereNull('news_parent_id')
+                ->where('news_mentor_id', $mentor->mtr_id)
+                ->latest()
+                ->get();
+
+    $newsFollowUp = News::whereNotNull('news_parent_id')
+                        ->where('news_mentor_id', $mentor->mtr_id)
+                        ->latest()
+                        ->get();
+
+    return view('comitte.guidance.index', compact('news', 'newsFollowUp'));
     }
 }

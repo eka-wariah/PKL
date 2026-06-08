@@ -181,6 +181,10 @@
                             </table>
                         </div>
                     </div>
+                    <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+                        <i class="ti ti-arrow-left"></i>
+                        Kembali
+                    </a>
 
                 </div>
             </div>
