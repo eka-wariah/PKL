@@ -37,7 +37,7 @@
         {{-- Summary Cards --}}
         @php
             $hadir = collect($report)->where('status', 1)->count();
-            $izin  = collect($report)->where('status', 2)->count();
+            $izin = collect($report)->where('status', 2)->count();
             $sakit = collect($report)->where('status', 3)->count();
             $alpha = collect($report)->filter(fn($r) => !in_array($r['status'], [1, 2, 3]))->count();
         @endphp
@@ -109,12 +109,11 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-4">
-                    <h4 class="card-title mb-0">Detail Absensi {{$student->user->name}}</h4>
+                    <h4 class="card-title mb-0">Detail Absensi {{ $student->user->name }}</h4>
                     <p class="text-muted small mb-0">{{ now()->translatedFormat('l, d F Y') }}</p>
                 </div>
                 <div class="table-responsive">
-                    <table id="table_absensi"
-                        class="table w-100 table-striped table-bordered display text-nowrap">
+                    <table id="table_absensi" class="table w-100 table-striped table-bordered display text-nowrap">
                         <thead>
                             <tr>
                                 <th width="5%">No</th>
@@ -122,13 +121,15 @@
                                 <th>Hari</th>
                                 <th>Status</th>
                                 <th>Waktu Masuk</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($report as $row)
                                 @php
                                     $hari = \Carbon\Carbon::createFromFormat('d-m-Y', $row['date'])
-                                        ->locale('id')->translatedFormat('l');
+                                        ->locale('id')
+                                        ->translatedFormat('l');
                                 @endphp
                                 <tr>
                                     <td>{{ $loop->iteration ?? '-' }}</td>
@@ -146,6 +147,16 @@
                                         @endif
                                     </td>
                                     <td>{{ $row['time'] ?? '—' }}</td>
+                                    <td>
+                                        @if ($row['status'] == 1)
+                                            <button type="button" class="btn btn-sm btn-primary preview-image"
+                                                data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                data-image="{{ Storage::url($row['photo']) }}"
+                                                data-download="/mentor/Attendance/download">
+                                                <i class="ti ti-photo"></i>
+                                            </button>
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -160,6 +171,7 @@
                                 <th>Hari</th>
                                 <th>Status</th>
                                 <th>Waktu Masuk</th>
+                                <th>Aksi</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -167,6 +179,43 @@
             </div>
         </div>
 
+    </div>
+
+
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Preview Foto Bimbingan
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body text-center">
+
+                    <img id="previewImage" src="" class="img-fluid rounded shadow" style="max-height:700px;">
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Kembali
+                    </button>
+
+                    <a href="#" id="downloadBtn" class="btn btn-success">
+                        <i class="ti ti-download"></i>
+                        Download
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
     </div>
 @endsection
 

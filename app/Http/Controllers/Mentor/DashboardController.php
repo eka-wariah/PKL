@@ -60,6 +60,7 @@ class DashboardController extends Controller
                 'date'   => $date->format('d-m-Y'),
                 'status' => $attendance?->att_status ?? 4,
                 'time'   => $attendance?->att_time,
+                'photo'  => $attendance?->att_photo
             ];
         }
         // dd($report);
