@@ -269,24 +269,35 @@
         <tr>
             <td class="label">Waktu Pelaksanaan</td>
             <td class="separator">:</td>
-            <td>{{ \Carbon\Carbon::parse($news->news_date)->translatedFormat('l, d F Y') }}</td>
+            <td>{{ \Carbon\Carbon::parse($news->news_date)->translatedFormat('l, d F Y') }} 
+                pukul
+                {{ \Carbon\Carbon::parse($news->news_start)->format('H.i') }}
+                s/d
+                {{ \Carbon\Carbon::parse($news->news_ended)->format('H.i') }}
+                WIB</td>
         </tr>
         <tr>
             <td class="label">Tempat/Media Bimbingan</td>
             <td class="separator">:</td>
-            <td></td>
+            <td> {!! nl2br(e($news->news_place ?? '-')) !!}</td>
         </tr>
         <tr>
             <td class="label"><b>Metode Pelaksanaan</b></td>
             <td class="separator"><b>:</b></td>
             <td>
-                <span style="border:1px solid #000; padding:0 5px;">&nbsp;</span>
+                <span style="border:1px solid #000; padding:0 5px;">
+                    {!! $news->news_method == 1 ? 'V' : '&nbsp;' !!}
+                </span>
                 Luring (Tatap Muka)<br>
             
-                <span style="border:1px solid #000; padding:0 5px;">&nbsp;</span>
+                <span style="border:1px solid #000; padding:0 5px;">
+                    {!! $news->news_method == 2 ? 'V' : '&nbsp;' !!}
+                </span>
                 Daring (Online)<br>
             
-                <span style="border:1px solid #000; padding:0 5px;">&nbsp;</span>
+                <span style="border:1px solid #000; padding:0 5px;">
+                    {!! $news->news_method == 3 ? 'V' : '&nbsp;' !!}
+                </span>
                 Hybrid (Kombinasi)
             </td>
         </tr>

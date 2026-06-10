@@ -94,10 +94,10 @@ class GuidanceController extends Controller
         compact('news', 'totalMentee', 'absentStudents')
     )->setPaper('a4', 'portrait');
 
-    // return $pdf->download(
-    //     'berita-acara.pdf'
-    // );
-    return $pdf->stream('berita-acara.pdf');
+    return $pdf->download(
+        'berita-acara.pdf'
+    );
+    // return $pdf->stream('berita-acara.pdf');
 }
 public function downloadPhoto($id)
 {
