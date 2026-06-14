@@ -152,7 +152,7 @@
                                             <button type="button" class="btn btn-sm btn-primary preview-image"
                                                 data-bs-toggle="modal" data-bs-target="#imageModal"
                                                 data-image="{{ Storage::url($row['photo']) }}"
-                                                data-download="/mentor/student-attendance/{{$row['photo']}}/download">
+                                                data-download="/mentor/student-attendance/{{$row['att_id']}}/download">
                                                 <i class="ti ti-photo"></i>
                                             </button>
                                         @endif

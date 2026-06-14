@@ -205,7 +205,7 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
         });
         Route::prefix('student-attendance')->name('studetnAttendance.')->group(function () {
             Route::get('/{id}', [MentorDashboardController::class, 'studentAttendance'])->name('studentAttendance');
-            Route::get('/{photo}/download', [MentorDashboardController::class, 'studentAttendance'])->name('studentAttendance');
+            Route::get('/{id}/download', [MentorDashboardController::class, 'downloadImage'])->name('downlaod');
 
             
         });

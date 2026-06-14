@@ -12,6 +12,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -56,6 +57,7 @@ class DashboardController extends Controller
             $attendance = $attendances->get($dateStr); // sekarang bisa lookup by tanggal
 
             $report[] = [
+                'att_id' => $attendance?->att_id,
                 'no'     => $no++,
                 'date'   => $date->format('d-m-Y'),
                 'status' => $attendance?->att_status ?? 4,
@@ -71,9 +73,14 @@ class DashboardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function downloadImage($id)
     {
-        //
+         $attendance = Attendance::findOrFail($id);
+
+        return Storage::disk('public')->download(
+            $attendance->att_photo,
+            basename($attendance->news_photo)
+        );
     }
 
     /**
