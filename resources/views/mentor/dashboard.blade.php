@@ -34,7 +34,7 @@
 
         {{-- Stat Cards --}}
         <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-3">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-3">
@@ -57,7 +57,37 @@
                                 <i class="ti ti-users fs-4 text-success"></i>
                             </div>
                             <div>
-                                <p class="mb-0 text-muted">Jumlah Siswa Dibimbing</p>
+                                <p class="mb-0 text-muted">Siswa Dibimbing</p>
+                                <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded bg-success-subtle">
+                                <i class="ti ti-users fs-4 text-success"></i>
+                            </div>
+                            <div>
+                                <p class="mb-0 text-muted">Siswa Presensi</p>
+                                <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded bg-success-subtle">
+                                <i class="ti ti-users fs-4 text-success"></i>
+                            </div>
+                            <div>
+                                <p class="mb-0 text-muted">Siswa Belum Presensi</p>
                                 <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
                             </div>
                         </div>
