@@ -53,8 +53,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 rounded bg-success-subtle">
-                                <i class="ti ti-users fs-4 text-success"></i>
+                            <div class="p-3 rounded bg-warning-subtle">
+                                <i class="ti ti-users fs-4 text-warning"></i>
                             </div>
                             <div>
                                 <p class="mb-0 text-muted">Siswa Dibimbing</p>
@@ -73,7 +73,7 @@
                             </div>
                             <div>
                                 <p class="mb-0 text-muted">Siswa Presensi</p>
-                                <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
+                                <h3 class="fw-semibold mb-0">{{$attendances->count()}}</h3>
                             </div>
                         </div>
                     </div>
@@ -83,12 +83,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 rounded bg-success-subtle">
-                                <i class="ti ti-users fs-4 text-success"></i>
+                            <div class="p-3 rounded bg-danger-subtle">
+                                <i class="ti ti-users fs-4 text-danger"></i>
                             </div>
                             <div>
                                 <p class="mb-0 text-muted">Siswa Belum Presensi</p>
-                                <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
+                                <h3 class="fw-semibold mb-0">{{$absents->count()}}</h3>
                             </div>
                         </div>
                     </div>

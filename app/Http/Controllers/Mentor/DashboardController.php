@@ -21,13 +21,25 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $academicYear = AcademicYear::where('acy_status', 1)->first();
         $students = MentorAssignments::with('student.attendanceToday')
             ->where('mas_mentor_id', Auth::user()->mentor->mtr_id)
             ->get();
         $guidances = News::where('news_mentor_id', Auth::user()->mentor->mtr_id)->where('news_parent_id', null)->get();
+        $studentIds = MentorAssignments::where('mas_mentor_id', Auth::user()->mentor->mtr_id)
+            ->where('mas_academic_id', $academicYear?->acy_id)
+            ->pluck('mas_student_id');
+        $attendances = Attendance::whereIn('att_std_id', $studentIds)
+            ->whereDate('att_date', today())
+            ->whereNull('deleted_at')
+            ->pluck('att_std_id');
 
+        $absents = Student::with('user')
+            ->whereIn('std_id', $studentIds)
+            ->whereNotIn('std_id', $attendances)
+            ->get();
         // dd($students);
-        return view('mentor.dashboard', compact(['students', 'guidances']));
+        return view('mentor.dashboard', compact(['students', 'guidances', 'attendances','absents']));
     }
 
     /**
@@ -36,7 +48,7 @@ class DashboardController extends Controller
     public function studentAttendance($id)
     {
 
-    $student= Student::findOrFail($id); 
+        $student = Student::findOrFail($id);
         $academicYear = AcademicYear::where('acy_status', 1)->first();
 
         $startDate = $academicYear->acy_year . '-06-01';
@@ -62,12 +74,16 @@ class DashboardController extends Controller
                 'date'   => $date->format('d-m-Y'),
                 'status' => $attendance?->att_status ?? 4,
                 'time'   => $attendance?->att_time,
-                'photo'  => $attendance?->att_photo
+                'photo'  => $attendance?->att_photo,
+                'latitude'  => $attendance?->att_latitude,
+                'longitude' => $attendance?->att_longitude,
+                'address'   => $attendance?->att_address,
             ];
         }
         // dd($report);
+        // dd($report);
 
-        return view('mentor.attendance.index', compact('report','student'));
+        return view('mentor.attendance.index', compact('report', 'student'));
     }
 
     /**
@@ -75,7 +91,7 @@ class DashboardController extends Controller
      */
     public function downloadImage($id)
     {
-         $attendance = Attendance::findOrFail($id);
+        $attendance = Attendance::findOrFail($id);
 
         return Storage::disk('public')->download(
             $attendance->att_photo,
