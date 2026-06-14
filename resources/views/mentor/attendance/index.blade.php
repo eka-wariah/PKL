@@ -152,7 +152,7 @@
                                             <button type="button" class="btn btn-sm btn-primary preview-image"
                                                 data-bs-toggle="modal" data-bs-target="#imageModal"
                                                 data-image="{{ Storage::url($row['photo']) }}"
-                                                data-download="/mentor/Attendance/download">
+                                                data-download="/mentor/student-attendance/{{$row['photo']}}/download">
                                                 <i class="ti ti-photo"></i>
                                             </button>
                                         @endif
@@ -226,6 +226,17 @@
         $('#table_absensi').DataTable({
             responsive: true,
             order: [],
+        });
+    </script>
+    <script>
+        $('.preview-image').click(function() {
+
+            let image = $(this).data('image');
+            let download = $(this).data('download');
+
+            $('#previewImage').attr('src', image);
+            $('#downloadBtn').attr('href', download);
+
         });
     </script>
 @endpush

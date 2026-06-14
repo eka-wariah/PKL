@@ -8,6 +8,7 @@ use App\Http\Controllers\comitte\GuidanceController as ComitteGuidanceController
 use App\Http\Controllers\comitte\TeacherController;
 use App\Http\Controllers\comitte\MajorController;
 use App\Http\Controllers\comitte\StudentController;
+use App\Http\Controllers\mentor\AttendanceReportController as MentorAttendanceReportController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\GuidanceController;
 // use App\Http\Controllers\PresenceController;
@@ -195,8 +196,17 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
 
 
         });
+        Route::prefix('report')->name('report.')->group(function () {
+
+            Route::get('/', [MentorAttendanceReportController::class, 'index'])->name('index');
+            Route::get('/download', [MentorAttendanceReportController::class, 'download'])->name('download');
+
+
+        });
         Route::prefix('student-attendance')->name('studetnAttendance.')->group(function () {
             Route::get('/{id}', [MentorDashboardController::class, 'studentAttendance'])->name('studentAttendance');
+            Route::get('/{photo}/download', [MentorDashboardController::class, 'studentAttendance'])->name('studentAttendance');
+
             
         });
 
