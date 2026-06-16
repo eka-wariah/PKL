@@ -80,6 +80,8 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
             Route::get('/import', [StudentController::class, 'importPage'])->name('importPage');
             Route::post('/import', [StudentController::class, 'import'])->name('import');
             Route::get('/template', [StudentController::class, 'downloadTemplate'])->name('template');
+            Route::get('/{id}/edit-password', [StudentController::class, 'editPassword'])->name('editPassword');
+            Route::put('/{id}/edit-password', [StudentController::class, 'updatePassword'])->name('editPassword');
         });
         Route::prefix('academic-years')->name('academic_years.')->group(function () {
             Route::get('/', [AcademicYearController::class, 'index'])->name('academic_years');

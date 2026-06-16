@@ -23,7 +23,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $student = User::role('student') ->with('student')->get();
+        $student = User::role('student')->with('student')->get();
         return view('comitte.student.index', compact('student'));
     }
 
@@ -46,7 +46,7 @@ class StudentController extends Controller
         $request->validate([
             'name'                  => 'required|string|max:255',
             'email'                 => 'required|email|unique:users,email',
-            
+
             // 'mtr_gtk'               => 'required|string|unique:mentors,mtr_gtk',
             'password'              => 'required|string|min:8|confirmed',
         ]);
@@ -74,7 +74,6 @@ class StudentController extends Controller
 
         return redirect()->route('comitte.student.index')
             ->with('success', 'Data guru berhasil ditambahkan.');
-
     }
 
     /**
@@ -83,10 +82,10 @@ class StudentController extends Controller
     public function show(string $id)
     {
         $student = User::with(['student.classes', 'student.company'])
-        ->where('usr_id', $id)
-        ->firstOrFail();
+            ->where('usr_id', $id)
+            ->firstOrFail();
 
-    return view('comitte.student.detail', compact('student'));
+        return view('comitte.student.detail', compact('student'));
     }
 
     /**
@@ -118,12 +117,12 @@ class StudentController extends Controller
     }
 
     public function downloadTemplate()
-{
-    return Excel::download(
-        new StudentTemplateExport,
-        'template-student.xlsx'
-    );
-}
+    {
+        return Excel::download(
+            new StudentTemplateExport,
+            'template-student.xlsx'
+        );
+    }
     // public function downloadTemplate()
     // {
     //     return Excel::download(new StudentTemplateExport, 'template-siswa.xlsx');
@@ -139,5 +138,29 @@ class StudentController extends Controller
         Alert::success('Berhasil Import', 'Data Guru Berhasil Diimport');
         return redirect()->route('comitte.student.index')
             ->with('success', 'Data siswa berhasil diimport.');
+    }
+
+    public function editPassword($id)
+    {
+        $student = User::findOrFail($id);
+        // dd($mentor);
+        return view('comitte.student.edit-password', compact(['student']));
+    }
+     public function updatePassword($id, Request $request)
+    {
+        $mentor = User::findOrFail($id);
+
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $mentor->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        Alert::success('Berhasil Megubah', 'Password berhasil diperbarui');
+
+        return redirect()->route('comitte.student.index')
+            ->with('success', 'Password Siswa berhasil diubah.');
     }
 }

@@ -13,45 +13,46 @@
     <div class="datatables">
         <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
             <div class="card-body px-4 py-3">
-              <div class="row align-items-center">
-                <div class="col-9">
-                  <h4 class="fw-semibold mb-8">LIST SISWA</h4>
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                    <li class="breadcrumb-item" aria-current="page">Daftar List Siswa</li>
-                    
-                      
-                    </ol>
-                   
-                  </nav>
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <h4 class="fw-semibold mb-8">LIST SISWA</h4>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item" aria-current="page">Daftar List Siswa</li>
+
+
+                            </ol>
+
+                        </nav>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-center mb-n5">
+                            <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt="modernize-img"
+                                class="img-fluid mb-n4" />
+                        </div>
+                    </div>
                 </div>
-                <div class="col-3">
-                  <div class="text-center mb-n5">
-                    <img src="{{ asset('assets/images/breadcrumb/ChatBc.png')}}" alt="modernize-img" class="img-fluid mb-n4" />
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-       
+        </div>
+
         <div class="card">
             <div class="card-body">
                 <div class="mb-4 d-flex justify-content-between align-items-center">
                     <h4 class="card-title mb-0">Daftar Siswa</h4>
-                    
-        
-               
-                <div class="d-flex gap-2">
-                  <a href="{{ route('comitte.student.importPage') }}" class="btn btn-success">
-                    <i class="ti ti-file-import me-1"></i> Import Siswa
-                </a>
-                  <a href="{{ route('comitte.student.create') }}" class="btn btn-primary">
-                      <i class="ti ti-plus me-1"></i> Tambah Siswa
-                  </a>
-              </div>
-            </div>
+
+
+
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('comitte.student.importPage') }}" class="btn btn-success">
+                            <i class="ti ti-file-import me-1"></i> Import Siswa
+                        </a>
+                        <a href="{{ route('comitte.student.create') }}" class="btn btn-primary">
+                            <i class="ti ti-plus me-1"></i> Tambah Siswa
+                        </a>
+                    </div>
+                </div>
                 <p class="card-subtitle mb-3">
-                    
+
                 </p>
                 <div class="table-responsive">
                     <table id="file_export" class="table w-100 table-striped table-bordered display text-nowrap">
@@ -63,42 +64,47 @@
                                 <th>Nama Siswa</th>
                                 <th>Kelas</th>
                                 <th>Aksi</th>
-                                
+
                             </tr>
                             <!-- end row -->
                         </thead>
                         <tbody>
-                          <!-- start row -->
-                          @foreach ( $student as $no=> $std)
-                          <tr>
-                              
-                              <td>{{$no+1}}</td>
-                              <td>{{ $std->student->std_nis ?? '-'}}</td>
-                              <td>{{ $std->name}}</td>
-                              <td>{{ $std->student->classes->cls_level ?? '-' }} {{ $std->student->classes->cls_major->mjr_abbr ?? '-' }}  {{ $std->student->classes->cls_number ?? '-' }}</td>
-{{--                       
+                            <!-- start row -->
+                            @foreach ($student as $no => $std)
+                                <tr>
+
+                                    <td>{{ $no + 1 }}</td>
+                                    <td>{{ $std->student->std_nis ?? '-' }}</td>
+                                    <td>{{ $std->name }}</td>
+                                    <td>{{ $std->student->classes->cls_level ?? '-' }}
+                                        {{ $std->student->classes->cls_major->mjr_abbr ?? '-' }}
+                                        {{ $std->student->classes->cls_number ?? '-' }}</td>
+                                    {{--                       
                               <td>{{ $std->student->std_mentor?? '-'}}</td> --}}
-                              
-                              <td>
-                                   <a href="/comitte/student/{{ $std->usr_id}}/edit"  class="btn btn-primary"><i class="ti ti-edit"></i></a>
-                                   <a href="/comitte/student/{{ $std->usr_id}}/destroy" class="btn btn-danger" data-confirm-delete="true"><i class="ti ti-trash"></i></a>
-                                   <a href="{{ route('comitte.student.detail', $std->usr_id) }}" 
-                                    class="btn btn-info">
-                                    <i class="ti ti-eye"></i>
-                                 </a>
 
-                              </td>
+                                    <td>
+                                        <a href="/comitte/student/{{ $std->usr_id }}/edit" class="btn btn-primary"><i
+                                                class="ti ti-edit"></i></a>
+                                        <a href="/comitte/student/{{ $std->usr_id }}/destroy" class="btn btn-danger"
+                                            data-confirm-delete="true"><i class="ti ti-trash"></i></a>
+                                        <a href="{{ route('comitte.student.detail', $std->usr_id) }}" class="btn btn-info">
+                                            <i class="ti ti-eye"></i>
+                                        </a>
+                                        <a href="/comitte/student/{{ $std->usr_id }}/edit-password"
+                                            class="btn btn-success"><i class="ti ti-key"></i></a>
+
+                                    </td>
 
 
-                              
-                          </tr>
-                          @endforeach
-                          <!-- end row -->
-                          
-                      </tbody>
+
+                                </tr>
+                            @endforeach
+                            <!-- end row -->
+
+                        </tbody>
                         <tfoot>
                             <!-- start row -->
-                            
+
 
                             <tr>
                                 <th width="10%">No</th>
@@ -114,7 +120,6 @@
             </div>
         </div>
     </div>
-    
 @endsection
 
 
