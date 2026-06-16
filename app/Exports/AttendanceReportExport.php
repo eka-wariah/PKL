@@ -2,11 +2,9 @@
 
 namespace App\Exports;
 
+use App\Models\Attendance;
 use App\Models\MentorAssignments;
-use App\Models\News;
-use App\Models\NewsParticipant;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithTitle;
@@ -15,6 +13,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use Carbon\CarbonPeriod;
 
 class AttendanceReportExport implements WithStyles, WithColumnWidths, WithTitle, WithEvents
 {
@@ -25,9 +24,17 @@ class AttendanceReportExport implements WithStyles, WithColumnWidths, WithTitle,
     protected $dates;
     protected $attendanceData;
 
-    public function __construct($mentor, $month, $year)
+    // status map
+    const STATUS = [
+        1 => ['label' => 'H', 'bg' => 'C8E6C9', 'font' => '2E7D32', 'text' => 'Hadir'],
+        2 => ['label' => 'I', 'bg' => 'FFF9C4', 'font' => 'F57F17', 'text' => 'Izin'],
+        3 => ['label' => 'S', 'bg' => 'BBDEFB', 'font' => '1565C0', 'text' => 'Sakit'],
+        4 => ['label' => 'A', 'bg' => 'FFCDD2', 'font' => 'C62828', 'text' => 'Tidak Hadir'],
+    ];
+
+    public function __construct($month, $year)
     {
-        $this->mentor = $mentor;
+        // $this->mentor = $mentor;
         $this->month  = $month;
         $this->year   = $year;
         $this->prepare();
@@ -35,30 +42,30 @@ class AttendanceReportExport implements WithStyles, WithColumnWidths, WithTitle,
 
     protected function prepare()
     {
-        // ambil semua tanggal bimbingan dalam bulan tsb
-        $this->dates = News::where('news_mentor_id', $this->mentor->mtr_id)
-            ->whereMonth('news_date', $this->month)
-            ->whereYear('news_date', $this->year)
-            ->whereNull('news_deleted_at')
-            ->orderBy('news_date')
-            ->pluck('news_date', 'news_id');
-
-        // ambil semua siswa bimbingan mentor
-        $this->students = MentorAssignments::with('student.user')
-            ->where('mas_mentor_id', $this->mentor->mtr_id)
-            ->get()
-            ->pluck('student')
-            ->filter();
-
-        // ambil data kehadiran
-        $participants = NewsParticipant::with('news')
-            ->whereIn('nwp_news_id', $this->dates->keys())
-            ->whereNull('nwp_deleted_at')
-            ->get();
-
-        // susun data: [student_id][news_id] = status
-        foreach ($participants as $p) {
-            $this->attendanceData[$p->nwp_student_id][$p->nwp_news_id] = $p->nwp_status ?? 'hadir';
+        {
+            $startDate = Carbon::create(
+                $this->year,
+                $this->month,
+                1
+            )->startOfMonth();
+        
+            $endDate = Carbon::create(
+                $this->year,
+                $this->month,
+                1
+            )->endOfMonth();
+        
+            $this->dates = collect(
+                CarbonPeriod::create($startDate, $endDate)
+            );
+        
+            $this->students = MentorAssignments::with([
+                'student.user',
+                'student.attendances' => function ($q) {
+                    $q->whereMonth('att_date', $this->month)
+                      ->whereYear('att_date', $this->year);
+                }
+            ])->get();
         }
     }
 
@@ -75,10 +82,9 @@ class AttendanceReportExport implements WithStyles, WithColumnWidths, WithTitle,
             'C' => 15,
         ];
 
-        // lebar kolom tanggal
         $col = 4;
         foreach ($this->dates as $date) {
-            $widths[$this->colLetter($col)] = 12;
+            $widths[$this->colLetter($col)] = 6;
             $col++;
         }
 
@@ -97,21 +103,20 @@ class AttendanceReportExport implements WithStyles, WithColumnWidths, WithTitle,
                 $sheet     = $event->sheet->getDelegate();
                 $dateCount = $this->dates->count();
                 $lastCol   = $this->colLetter(3 + $dateCount);
-                $totalRows = $this->students->count() + 4;
 
                 // === JUDUL ===
                 $sheet->mergeCells("A1:{$lastCol}1");
-                $sheet->setCellValue('A1', 'LAPORAN KEHADIRAN BIMBINGAN');
+                $sheet->setCellValue('A1', 'LAPORAN KEHADIRAN HARIAN PKL');
                 $sheet->getStyle('A1')->applyFromArray([
-                    'font'      => ['bold' => true, 'size' => 14, 'name' => 'Arial'],
+                    'font'      => ['bold' => true, 'size' => 14, 'name' => 'Arial', 'color' => ['rgb' => '1A237E']],
                     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
                 ]);
 
                 $sheet->mergeCells("A2:{$lastCol}2");
                 $bulan = Carbon::create($this->year, $this->month)->translatedFormat('F Y');
-                $sheet->setCellValue('A2', 'Pembimbing: ' . $this->mentor->user->name . ' | Periode: ' . $bulan);
+                // $sheet->setCellValue('A2', 'Pembimbing: ' . $this->mentor->user->name . '  |  Periode: ' . $bulan);
                 $sheet->getStyle('A2')->applyFromArray([
-                    'font'      => ['size' => 11, 'name' => 'Arial'],
+                    'font'      => ['size' => 10, 'name' => 'Arial', 'color' => ['rgb' => '555555']],
                     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
                 ]);
 
@@ -123,118 +128,163 @@ class AttendanceReportExport implements WithStyles, WithColumnWidths, WithTitle,
                 $sheet->setCellValue('C4', 'NIS');
 
                 $col = 4;
-                foreach ($this->dates as $newsId => $date) {
-                    $sheet->setCellValue($this->colLetter($col) . '4',
-                        Carbon::parse($date)->translatedFormat('d M'));
+                foreach ($this->dates as $date) {
+                    $sheet->setCellValue(
+                        $this->colLetter($col) . '4',
+                        Carbon::parse($date)->format('d')
+                    );
+                    // tooltip nama hari di baris 5
+                    $sheet->setCellValue(
+                        $this->colLetter($col) . '5',
+                        Carbon::parse($date)->translatedFormat('D')
+                    );
                     $col++;
                 }
 
+                // style header baris 4
                 $sheet->getStyle("A4:{$lastCol}4")->applyFromArray([
-                    'font' => ['bold' => true, 'name' => 'Arial', 'size' => 11],
-                    'fill' => [
-                        'fillType'   => Fill::FILL_SOLID,
-                        'startColor' => ['rgb' => '1E88E5'],
-                    ],
-                    'font'      => ['bold' => true, 'color' => ['rgb' => 'FFFFFF'], 'name' => 'Arial'],
-                    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-                    'borders'   => [
-                        'allBorders' => [
-                            'borderStyle' => Border::BORDER_THIN,
-                            'color'       => ['rgb' => 'FFFFFF'],
-                        ],
-                    ],
+                    'fill'      => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '1565C0']],
+                    'font'      => ['bold' => true, 'color' => ['rgb' => 'FFFFFF'], 'name' => 'Arial', 'size' => 10],
+                    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
+                    'borders'   => ['allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'FFFFFF']]],
                 ]);
-                $sheet->getRowDimension(4)->setRowHeight(25);
+
+                // style header baris 5 (nama hari)
+                $sheet->getStyle("D5:{$lastCol}5")->applyFromArray([
+                    'fill'      => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '90CAF9']],
+                    'font'      => ['bold' => true, 'color' => ['rgb' => '0D47A1'], 'name' => 'Arial', 'size' => 9],
+                    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+                ]);
+                $sheet->getStyle('A5:C5')->applyFromArray([
+                    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '1565C0']],
+                    'font' => ['color' => ['rgb' => 'FFFFFF']],
+                ]);
+
+                $sheet->getRowDimension(4)->setRowHeight(22);
+                $sheet->getRowDimension(5)->setRowHeight(18);
 
                 // === DATA SISWA ===
-                $row = 5;
+                $row = 6;
                 foreach ($this->students as $i => $student) {
                     $sheet->setCellValue("A{$row}", $i + 1);
-                    $sheet->setCellValue("B{$row}", $student->user->name ?? '-');
-                    $sheet->setCellValue("C{$row}", $student->std_nis ?? '-');
-
+                    $sheet->setCellValue("B{$row}", $student->student->user->name ?? '-');
+                    
+                    $sheet->setCellValue("C{$row}",$student->student->std_nis ?? '-');
                     $col = 4;
-                    foreach ($this->dates as $newsId => $date) {
-                        $status = $this->attendanceData[$student->std_id][$newsId] ?? null;
+                    foreach ($this->dates as $date) {
                         $colLetter = $this->colLetter($col);
-                        $cell = "{$colLetter}{$row}";
+                        $cell      = "{$colLetter}{$row}";
+                        $attendance = $student->student->attendances
+                        ->firstWhere(
+                            'att_date',
+                            $date->format('Y-m-d')
+                        );
+                        // dd(
+                        //     $date->format('Y-m-d'),
+                        //     $student->student->attendances->pluck('att_date')
+                        // );
+                        // $status    = $this->attendanceData[$student->std_id][$date] ?? null;
 
-                        if ($status === null) {
-                            // tidak hadir
-                            $sheet->setCellValue($cell, 'A');
+                        // if ($status !== null && isset(self::STATUS[$status])) {
+                        //     $s = self::STATUS[$status];
+                        //     $sheet->setCellValue($cell, $s['label']);
+                        //     $sheet->getStyle($cell)->applyFromArray([
+                        //         'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => $s['bg']]],
+                        //         'font' => ['color' => ['rgb' => $s['font']], 'bold' => true, 'size' => 9],
+                        //     ]);
+                        // } else {
+                        //     // belum ada data
+                        //     $sheet->setCellValue($cell, '-');
+                        //     $sheet->getStyle($cell)->applyFromArray([
+                        //         'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FF0000']],
+                        //         'font' => ['color' => ['rgb' => 'BDBDBD'], 'size' => 9],
+                        //     ]);
+                        // }
+                        if ($attendance) {
+
+                            switch ($attendance->att_status) {
+                        
+                                case 1:
+                                    $label = 'H';
+                                    $bg = '28A745';
+                                    break;
+                        
+                                case 2:
+                                    $label = 'I';
+                                    $bg = 'FD7E14';
+                                    break;
+                        
+                                case 3:
+                                    $label = 'S';
+                                    $bg = '0D6EFD';
+                                    break;
+                        
+                                case 4:
+                                    $label = 'A';
+                                    $bg = 'DC3545';
+                                    break;
+                        
+                                default:
+                                    $label = '-';
+                                    $bg = 'FFFFFF';
+                            }
+                        
+                            $sheet->setCellValue($cell, $label);
+                        
                             $sheet->getStyle($cell)->applyFromArray([
-                                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFCDD2']],
-                                'font' => ['color' => ['rgb' => 'C62828'], 'bold' => true],
+                                'fill' => [
+                                    'fillType' => Fill::FILL_SOLID,
+                                    'startColor' => ['rgb' => $bg]
+                                ],
+                                'font' => [
+                                    'color' => ['rgb' => 'FFFFFF'],
+                                    'bold' => true,
+                                    'size' => 9
+                                ]
                             ]);
-                        } elseif ($status === 'hadir') {
-                            $sheet->setCellValue($cell, 'H');
-                            $sheet->getStyle($cell)->applyFromArray([
-                                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'C8E6C9']],
-                                'font' => ['color' => ['rgb' => '2E7D32'], 'bold' => true],
-                            ]);
-                        } elseif ($status === 'izin') {
-                            $sheet->setCellValue($cell, 'I');
-                            $sheet->getStyle($cell)->applyFromArray([
-                                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFF9C4']],
-                                'font' => ['color' => ['rgb' => 'F57F17'], 'bold' => true],
-                            ]);
-                        } elseif ($status === 'sakit') {
-                            $sheet->setCellValue($cell, 'S');
-                            $sheet->getStyle($cell)->applyFromArray([
-                                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'BBDEFB']],
-                                'font' => ['color' => ['rgb' => '1565C0'], 'bold' => true],
-                            ]);
+                        
+                        } else {
+                        
+                            $sheet->setCellValue($cell, '-');
                         }
 
                         $sheet->getStyle($cell)->getAlignment()
-                            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                            ->setVertical(Alignment::VERTICAL_CENTER);
+
                         $col++;
                     }
 
-                    // stripe baris
-                    $bgRow = ($i % 2 === 0) ? 'FFFFFF' : 'F5F5F5';
+                    // border & stripe
+                    $bgRow = ($i % 2 === 0) ? 'FFFFFF' : 'F8F9FA';
                     $sheet->getStyle("A{$row}:C{$row}")->applyFromArray([
                         'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => $bgRow]],
+                        'font' => ['name' => 'Arial', 'size' => 10],
                     ]);
-
                     $sheet->getStyle("A{$row}:{$lastCol}{$row}")->applyFromArray([
-                        'borders' => [
-                            'allBorders' => [
-                                'borderStyle' => Border::BORDER_THIN,
-                                'color'       => ['rgb' => 'E0E0E0'],
-                            ],
-                        ],
-                        'font'      => ['name' => 'Arial', 'size' => 10],
+                        'borders'   => ['allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'E0E0E0']]],
                         'alignment' => ['vertical' => Alignment::VERTICAL_CENTER],
                     ]);
-
-                    $sheet->getRowDimension($row)->setRowHeight(20);
+                    $sheet->getRowDimension($row)->setRowHeight(18);
                     $row++;
                 }
 
                 // === LEGENDA ===
-                $sheet->setCellValue("A{$row}", '');
-                $row++;
+                $row += 1;
                 $sheet->setCellValue("A{$row}", 'Keterangan:');
-                $sheet->getStyle("A{$row}")->getFont()->setBold(true);
+                $sheet->getStyle("A{$row}")->getFont()->setBold(true)->setName('Arial');
                 $row++;
 
-                $legends = [
-                    ['H', 'C8E6C9', '2E7D32', 'Hadir'],
-                    ['I', 'FFF9C4', 'F57F17', 'Izin'],
-                    ['S', 'BBDEFB', '1565C0', 'Sakit'],
-                    ['A', 'FFCDD2', 'C62828', 'Tidak Hadir'],
-                ];
-
-                foreach ($legends as $legend) {
-                    $sheet->setCellValue("A{$row}", $legend[0]);
+                foreach (self::STATUS as $s) {
+                    $sheet->setCellValue("A{$row}", $s['label']);
                     $sheet->getStyle("A{$row}")->applyFromArray([
-                        'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => $legend[1]]],
-                        'font' => ['color' => ['rgb' => $legend[2]], 'bold' => true, 'name' => 'Arial'],
+                        'fill'      => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => $s['bg']]],
+                        'font'      => ['color' => ['rgb' => $s['font']], 'bold' => true, 'name' => 'Arial'],
                         'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+                        'borders'   => ['allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'E0E0E0']]],
                     ]);
-                    $sheet->setCellValue("B{$row}", '= ' . $legend[3]);
-                    $sheet->getStyle("B{$row}")->getFont()->setName('Arial');
+                    $sheet->setCellValue("B{$row}", '= ' . $s['text']);
+                    $sheet->getStyle("B{$row}")->getFont()->setName('Arial')->setSize(10);
                     $row++;
                 }
             },

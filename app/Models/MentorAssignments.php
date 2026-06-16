@@ -22,5 +22,9 @@ class MentorAssignments extends Model
     {
         return $this->belongsTo(Mentor::class, 'mas_mentor_id', 'mtr_id');
     }
+    public function company()
+{
+    return $this->belongsTo(Company::class, 'mas_cmp_id', 'cmp_id');
+}
     
 }

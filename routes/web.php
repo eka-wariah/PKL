@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\comitte\AcademicYearController;
+use App\Http\Controllers\comitte\AttendanceReportController;
 use App\Http\Controllers\comitte\ClassesController;
 use App\Http\Controllers\comitte\CompanyController;
 use App\Http\Controllers\comitte\DashboardController;
@@ -47,6 +48,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:comitte'])->group(function () {
     Route::prefix('comitte')->name('comitte.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/export-pdf',[AttendanceReportController::class, 'Pdf'])->name('attendanceReport.pdf');
+        Route::get('/export-excel',[AttendanceReportController::class, 'downloadAttendance'])->name('attendanceReport.excel');
 
         Route::prefix('teacher')->name('teacher.')->group(function () {
             Route::get('/template', [TeacherController::class, 'downloadTemplate'])->name('template');
@@ -126,6 +129,18 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
             Route::get('/{id}/show', [ComitteGuidanceController::class, 'show'])->name('show');
             Route::get('/{id}/export-pdf',[ComitteGuidanceController::class, 'exportPdf'])->name('export.pdf');
             Route::get('/{id}/photo/download',[ComitteGuidanceController::class, 'downloadPhoto']);
+        });
+        Route::prefix('attendance-report')->name('attendance-report.')->group(function () {
+
+            Route::get('/', [AttendanceReportController::class, 'index'])->name('index');
+            Route::get('/{id}/show', [AttendanceReportController::class, 'show'])->name('show');
+            Route::get('/{id}/export-pdf',[AttendanceReportController::class, 'Pdf'])->name('attendanceReport.pdf');
+            Route::get('/{id}/photo/download',[AttendanceReportController::class, 'downloadPhoto']);
+            Route::get('/attendance-report/download', [AttendanceReportController::class, 'downloadAttendance'])->name('attendance-report.download');
+        });
+        Route::prefix('student-attendance')->name('studetnAttendance.')->group(function () {
+            Route::get('/{id}', [DashboardController::class, 'studentAttendance'])->name('studentAttendance');
+            Route::get('/{photo}/download', [DashboardController::class, 'studentAttendance'])->name('studentAttendance');
         });
     });
 

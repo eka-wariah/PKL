@@ -1,4 +1,4 @@
-@extends('mentor.master')
+@extends('comitte.master')
 
 @section('content')
 <div class="card">
@@ -7,7 +7,7 @@
     </div>
 
     <div class="card-body">
-       <form action="{{ route('mentor.report.download') }}" method="GET" class="d-flex gap-2 align-items-end">
+       <form action="{{ route('comitte.report.download') }}" method="GET" class="d-flex gap-2 align-items-end">
     <div>
         <label class="form-label fw-semibold mb-1">Bulan</label>
         <select name="month" class="form-select">

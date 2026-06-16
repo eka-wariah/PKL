@@ -28,7 +28,7 @@ class AttendanceReportController extends Controller
     {
         $students = null;
 
-        if ($request->filled(['start_date', 'end_date'])) {
+        if ($request->filled(['month', 'year'])) {
 
             $students = Student::with('user')
 
@@ -36,10 +36,8 @@ class AttendanceReportController extends Controller
                 ->map(function ($student) use ($request) {
 
                     $attendances = Attendance::where('att_std_id', $student->std_id)
-                        ->whereBetween('att_date', [
-                            $request->start_date,
-                            $request->end_date
-                        ])
+                    ->whereMonth('att_date', $request->month)
+                    ->whereYear('att_date', $request->year)
                         ->get();
 
                     $student->hadir = $attendances->where('att_status', 1)->count();
@@ -55,26 +53,29 @@ class AttendanceReportController extends Controller
 
     public function pdf(Request $request)
     {
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        $month = $request->month;
+        $year  = $request->year;
+    
+        $startDate = Carbon::create($year, $month, 1)->startOfMonth();
+        $endDate   = Carbon::create($year, $month, 1)->endOfMonth();
+    
         $students = MentorAssignments::with([
             'student.user',
-            'student.attendances' => function ($q) use ($startDate, $endDate) {
-                $q->whereBetween('att_date', [$startDate, $endDate]);
+            'student.attendances' => function ($q) use ($month, $year) {
+                $q->whereMonth('att_date', $month)
+                  ->whereYear('att_date', $year);
             }
-        ])
-
-            ->get();
-
+        ])->get();
+    
         $dates = CarbonPeriod::create($startDate, $endDate);
+    
         $pdf = Pdf::loadView(
             'comitte.report.pdf',
             compact('students', 'dates', 'startDate', 'endDate')
         );
-
+    
         return $pdf->stream('laporan-kehadiran.pdf');
     }
-
 
 
 
@@ -84,13 +85,16 @@ class AttendanceReportController extends Controller
             'month' => 'required|integer|between:1,12',
             'year'  => 'required|integer|min:2020',
         ]);
-        // dd($request);
+    //  dd($request);
 
-        $mentor   = Mentor::where('mtr_usr_id', Auth::user()->usr_id)->firstOrFail();
+        //  $mentor   = Mentor::where('mtr_usr_id', Auth::user()->usr_id)->firstOrFail();
         $month    = $request->month;
         $year     = $request->year;
         $filename = 'laporan-kehadiran-' . Carbon::create($year, $month)->format('Y-m') . '.xlsx';
-
-        return Excel::download(new AttendanceReportExport($mentor, $month, $year), $filename);
+        // dd($mentor);
+        return Excel::download(
+            new AttendanceReportExport($month, $year),
+            $filename
+        );
     }
 }

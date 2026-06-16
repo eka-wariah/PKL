@@ -56,7 +56,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $student->student->std_nis }}</td>
                 <td>
-                    {{ $student->student->user->usr_name }}
+                    {{ $student->student->user->name }}
                 </td>
 
                 @foreach($dates as $date)
