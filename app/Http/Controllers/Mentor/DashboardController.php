@@ -82,6 +82,7 @@ class DashboardController extends Controller
         }
         // dd($report);
         // dd($report);
+        $report = array_reverse($report);
 
         return view('mentor.attendance.index', compact('report', 'student'));
     }

@@ -68,6 +68,8 @@ class DashboardController extends Controller
             ];
         }
         // dd($report);
+        $report = array_reverse($report);
+
 
         return view('comitte.attendance.index', compact('report','student'));
     }
