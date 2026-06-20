@@ -13,8 +13,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentTemplateExport;
 use App\Imports\StudentImport;
-
-
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -93,7 +92,16 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $student = User::with([
+            'student.classes',
+            'student.company'
+        ])->where('usr_id', $id)
+          ->firstOrFail();
+    
+        $class = Classes::with('cls_major')->get();
+        $company = Company::all();
+    
+        return view('comitte.student.edit', compact('student', 'class', 'company'));
     }
 
     /**
@@ -101,7 +109,29 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+    // $request->validate([
+    //     'name' => 'required',
+    //     'std_nis' => 'required',
+    //     'std_nisn' => 'required',
+    // ]);
+
+    $user->update([
+        'name' => $request->name,
+    ]);
+
+    $user->student->update([
+        'std_nis'        => $request->std_nis,
+        'std_nisn'       => $request->std_nisn,
+        'std_classes_id' => $request->std_classes_id,
+        'std_company_id' => $request->std_company_id,
+    ]);
+    Alert::success('Berhasil Update', 'Data siswa berhasil diperbarui');
+        return redirect('/comitte/student');
+    // return redirect()
+    //     ->route('comitte.student.index')
+    //     ->with('success', 'Data siswa berhasil diperbarui');
     }
 
     /**
@@ -140,6 +170,7 @@ class StudentController extends Controller
             ->with('success', 'Data siswa berhasil diimport.');
     }
 
+
     public function editPassword($id)
     {
         $student = User::findOrFail($id);
@@ -163,4 +194,19 @@ class StudentController extends Controller
         return redirect()->route('comitte.student.index')
             ->with('success', 'Password Siswa berhasil diubah.');
     }
+
+    public function updatePassword1(Request $request, $id)
+{
+    $request->validate([
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $student = User::findOrFail($id);
+
+    $student->update([
+        'password' => Hash::make($request->password)
+    ]);
+
+    return back()->with('success', 'Password siswa berhasil diubah');
+}
 }

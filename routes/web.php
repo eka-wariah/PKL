@@ -82,6 +82,7 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
             Route::get('/template', [StudentController::class, 'downloadTemplate'])->name('template');
             Route::get('/{id}/edit-password', [StudentController::class, 'editPassword'])->name('editPassword');
             Route::put('/{id}/edit-password', [StudentController::class, 'updatePassword'])->name('editPassword');
+            Route::put('/{id}/password',[StudentController::class, 'updatePassword1'])->name('password.update');
         });
         Route::prefix('academic-years')->name('academic_years.')->group(function () {
             Route::get('/', [AcademicYearController::class, 'index'])->name('academic_years');
@@ -210,7 +211,6 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
             // Route::get('/{id}/export-word',[GuidanceController::class, 'exportWord'])->name('guidance.export.word');
             Route::get('/{id}/export-pdf',[GuidanceController::class, 'exportPdf'])->name('guidance.export.pdf');
             Route::get('/{id}/photo/download',[GuidanceController::class, 'downloadPhoto']);
-
 
         });
         Route::prefix('report')->name('report.')->group(function () {
