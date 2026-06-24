@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/1.png') }}" />
 
     <!-- Core Css -->
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}" />
@@ -19,32 +19,123 @@
 <body>
     <!-- Preloader -->
     <div class="preloader">
-        <img src="{{ asset('assets/images/logos/favicon.png') }}" alt="loader" class="lds-ripple img-fluid" />
+        <img src="{{ asset('assets/images/logos/1.png') }}" alt="loader" class="lds-ripple img-fluid" />
     </div>
     <div id="main-wrapper" class="auth-customizer-none">
         <div class="position-relative overflow-hidden radial-gradient min-vh-100 w-100">
             <div class="position-relative z-index-5">
                 <div class="row">
                     <div class="col-xl-7 col-xxl-8">
-                        {{-- <a href="../main/index.html" class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                            <img src="../assets/images/logos/dark-logo.svg" class="dark-logo" alt="Logo-Dark" />
-                            <img src="../assets/images/logos/light-logo.svg" class="light-logo" alt="Logo-light" />
-                        </a> --}}
-                        <a href="/"
-                            class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                            <img id="logo" src="{{ asset('assets/images/logos/logooo.png') }}" width="150"
+                        <a href="/" class="text-nowrap logo-img d-flex align-items-center px-4 py-3">
+
+                            <img id="logo"
+                                src="{{ asset('assets/images/logos/1.png') }}"
+                                width="90"
                                 alt="Logo">
+                        
+                                <div class="ms-2 fw-bold d-flex align-items-center gap-1 overflow-hidden">
 
-                            <script>
-                                const logo = document.getElementById('logo');
-                                const isDark = document.body.classList.contains('dark-theme');
-
-                                logo.src = isDark ?
-                                    "{{ asset('assets/images/logos/logooo.png') }}" :
-                                    "{{ asset('assets/images/logos/logooo.png') }}";
-                            </script>
+                                    <span id="prefixText">
+                                        Sistem Informasi Kegiatan
+                                    </span>
+                                
+                                    <span id="mainText">
+                                        PKL
+                                    </span>
+                                
+                                </div>
+                        
                         </a>
-                        <div class="d-none d-xl-flex align-items-center justify-content-center h-n80">
+                        
+                        <style>
+                            #logo {
+                                animation: logoZoom .8s ease;
+                            }
+                        
+                            #prefixText,
+                            #mainText {
+                                white-space: nowrap;
+                                font-size: 17.8px;
+                            }
+                        
+                            /* animasi muncul awal */
+                            #prefixText,
+                            #mainText {
+                                display: inline-block;
+                                overflow: hidden;
+                                max-width: 0;
+                                opacity: 0;
+                                animation: showText 2s ease forwards;
+                                animation-delay: .5s;
+                            }
+                        
+                            #prefixText {
+                                width: 220px;
+                                max-width: 220px;
+                                transition: width 2.5s ease, opacity 2.5s ease;
+                            }
+                        
+                            @keyframes showText {
+                                from {
+                                    max-width: 0;
+                                    opacity: 0;
+                                }
+                        
+                                to {
+                                    max-width: 500px;
+                                    opacity: 1;
+                                }
+                            }
+                        
+                            @keyframes logoZoom {
+                                from {
+                                    transform: scale(0);
+                                }
+                        
+                                to {
+                                    transform: scale(1);
+                                }
+                            }
+                        </style>
+                        
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                        
+                                const logo = document.getElementById('logo');
+                                const prefixText = document.getElementById('prefixText');
+                                const mainText = document.getElementById('mainText');
+                        
+                                const isDark = document.body.classList.contains('dark-theme');
+                        
+                                logo.src = isDark
+                                    ? "{{ asset('assets/images/logos/1.png') }}"
+                                    : "{{ asset('assets/images/logos/1.png') }}";
+                        
+                                // Tunggu 5 detik
+                                setTimeout(() => {
+                        
+                                    // PKL -> SIPKL
+                                    mainText.textContent = 'SIPKL';
+                        
+                                    // Tunggu sebentar
+                                    setTimeout(() => {
+                        
+                                        // tulisan depan mengecil perlahan
+                                        prefixText.style.width = '0px';
+                                        prefixText.style.opacity = '0';
+                        
+                                        // hapus setelah animasi selesai
+                                        setTimeout(() => {
+                                            prefixText.remove();
+                                        }, 2600);
+                        
+                                    }, 1000);
+                        
+                                }, 5000);
+                        
+                            });
+                        </script>
+                        <div class="d-none d-xl-flex align-items-center justify-content-center">
                             <img src="../assets/images/backgrounds/login-security.svg" alt="modernize-img"
                                 class="img-fluid" width="500">
                         </div>
@@ -58,22 +149,6 @@
 
                                 </div>
                                 <p class="mb-7"></p>
-                                {{-- <div class="row">
-                                    <div class="col-12 mb-2 mb-sm-0">
-                                        <a class="btn text-dark border fw-normal d-flex align-items-center justify-content-center rounded-2 py-8"
-                                            href="" role="button">
-                                            <img src="../assets/images/svgs/google-icon.svg" alt="modernize-img"
-                                                class="img-fluid me-2" width="18" height="18">
-                                            <span class="flex-shrink-0"> Dengan Google</span>
-                                        </a>
-                                    </div>
-                                   <div class="col-6">
-                    <a class="btn text-dark border fw-normal d-flex align-items-center justify-content-center rounded-2 py-8" href="javascript:void(0)" role="button">
-                      <img src="../assets/images/svgs/facebook-icon.svg" alt="modernize-img" class="img-fluid me-2" width="18" height="18">
-                      <span class="flex-shrink-0">with FB</span>
-                    </a>
-                  </div>
-                                </div> --}}
                                 <div class="position-relative text-center my-4">
                                     <p
                                         class="mb-0 fs-4 px-3 d-inline-block bg-body text-dark z-index-5 position-relative">
@@ -109,12 +184,7 @@
                                         <a class="text-primary fw-medium fs-3" href="/forgot-password">Forgot Password
                                             ?</a>
                                     </div>
-                                    {{-- <a href="../main/indeax.html" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</a> --}}
                                     <button class="btn btn-primary w-100 py-8 mb-4 rounded-2"> Sign In</button>
-                                    {{-- <div class="d-flex align-items-center justify-content-center">
-                                        <p class="fs-4 mb-0 fw-medium">Buat Akun Baru?</p>
-                                        <a class="text-primary fw-medium ms-2" href="register">Buat Akun</a>
-                                    </div> --}}
                                 </form>
                             </div>
                         </div>
