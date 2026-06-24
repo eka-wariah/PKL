@@ -151,12 +151,15 @@ class TeacherController extends Controller
     public function createMentee($mentorId)
     {
         $mentor = Mentor::with('user')->findOrFail($mentorId);
+        $studentAssigned = MentorAssignments::where('mas_mentor_id', $mentorId)
+    ->pluck('mas_student_id');
+    // dd($sudahAssigned);
 
         // ambil siswa yang belum punya mentor assignment
         $students = Student::with('user')
-            ->whereDoesntHave('mentorAssignment')
+            ->whereNotIn('std_id', $studentAssigned)
             ->get();
-
+        // dd($students);
         return view('comitte.teacher.mentee-create', compact('mentor', 'students'));
     }
 

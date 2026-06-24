@@ -73,7 +73,7 @@
                             </div>
                             <div>
                                 <p class="mb-0 text-muted">Siswa Presensi</p>
-                                <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
+                                <h3 class="fw-semibold mb-0">{{$attendances->count()}}</h3>
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                             </div>
                             <div>
                                 <p class="mb-0 text-muted">Siswa Belum Presensi</p>
-                                <h3 class="fw-semibold mb-0">{{$students->count()}}</h3>
+                                <h3 class="fw-semibold mb-0">{{$absents->count()}}</h3>
                             </div>
                         </div>
                     </div>

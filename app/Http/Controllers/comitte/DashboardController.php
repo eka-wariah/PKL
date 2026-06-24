@@ -19,18 +19,35 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $students = MentorAssignments::with('student.attendanceToday', 'student.company')->get();
+        $students = MentorAssignments::with('student.attendanceToday', 'student.company')->get() ->unique('mas_student_id');
+        // dd();
         $totalPerusahaan = $students
     ->pluck('student.std_company_id')
     ->filter()
     ->unique()
     ->count();
     $totalGuru = User::role('mentor')->count();
+    $academicYear = AcademicYear::where('acy_status', 1)->first();
+
+    $studentIds = MentorAssignments::where('mas_academic_id', $academicYear?->acy_id)
+            ->pluck('mas_student_id')
+            ->unique('mas_student_id');
+            // dd($studentIds);
+
+    $attendances = Attendance::whereIn('att_std_id', $studentIds)
+            ->whereDate('att_date', today())
+            ->whereNull('deleted_at')
+            ->pluck('att_std_id');
+
+        $absents = Student::with('user')
+            ->whereIn('std_id', $studentIds)
+            ->whereNotIn('std_id', $attendances)
+            ->get();
 
     // $guidances = News::where('news_mentor_id', Auth::user()->mentor->mtr_id)->where('news_parent_id', null)->get();
     // dd($students->first()->company);
     // dd($students);
-    return view('comitte.dashboard', compact(['students', 'totalPerusahaan', 'totalGuru']));
+    return view('comitte.dashboard', compact(['students', 'totalPerusahaan', 'totalGuru','attendances','absents']));
     }
 
     /**
