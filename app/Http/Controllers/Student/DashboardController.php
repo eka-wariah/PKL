@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+
+
 
 class DashboardController extends Controller
 {
@@ -15,6 +19,41 @@ class DashboardController extends Controller
     public function index()
     {
         $student = auth()->user()->student;
+        $academicYear = AcademicYear::where('acy_status', 1)->first();
+        $startDate = $academicYear->acy_year . '-06-01';
+        $endDate = Carbon::now()->toDateString();
+        $period = CarbonPeriod::create($startDate, $endDate);
+
+        $attendances = Attendance::where('att_std_id',auth()->user()->student->std_id)
+            ->whereBetween('att_date', [$startDate, $endDate])
+            ->orderBy('att_date')
+            ->get()
+            ->keyBy('att_date');
+            // dd($attendances);
+            $report = [];
+        $no = 1;
+
+         foreach ($period as $date) {
+            $dateStr = $date->format('Y-m-d');
+            $attendance = $attendances->get($dateStr); // sekarang bisa lookup by tanggal
+
+            $report[] = [
+                'att_id' => $attendance?->att_id,
+                'no'     => $no++,
+                'date'   => $date->format('d-m-Y'),
+                'status' => $attendance?->att_status ?? 4,
+                'time'   => $attendance?->att_time,
+                'photo'  => $attendance?->att_photo,
+                'latitude'  => $attendance?->att_latitude,
+                'longitude' => $attendance?->att_longitude,
+                'address'   => $attendance?->att_address,
+            ];
+        }
+
+
+
+
+
 
         $hadir = \App\Models\Attendance::where('att_std_id', $student->std_id)
             ->where('att_status', 1)
@@ -28,9 +67,19 @@ class DashboardController extends Controller
             ->where('att_status', 3)
             ->count();
 
-        $alpha = \App\Models\Attendance::where('att_std_id', $student->std_id)
-            ->where('att_status', 4)
-            ->count();
+        $alpha = collect($report)->filter(fn($r) => !in_array($r['status'], [1, 2, 3]))->count();
+        // dd($alpha);
+
+
+
+
+
+
+
+
+
+
+
 
         $total = $hadir + $izin + $sakit + $alpha;
 
@@ -72,46 +121,43 @@ class DashboardController extends Controller
 
         $today = Carbon::today();
 
-$todayAttendance = Attendance::where('att_std_id', $student->std_id)
-    ->whereDate('att_date', $today)
-    ->first();
+        $todayAttendance = Attendance::where('att_std_id', $student->std_id)
+            ->whereDate('att_date', $today)
+            ->first();
 
-$hour = now()->hour;
+        $hour = now()->hour;
 
-if ($hour < 12) {
+        if ($hour < 12) {
 
-    $clockEmoji = '⏰🥰';
-    $clockTitle = 'Ayo Presensi!';
-    $clockMessage = 'Jangan lupa melakukan presensi sebelum waktu ditutup.';
-    $clockColor = 'warning';
-
-} else {
-
-    if ($todayAttendance) {
-
-        if ($todayAttendance->att_status == 4) {
-
-            $clockEmoji = '⏰😠';
-            $clockTitle = 'Kenapa Tidak Absen?';
-            $clockMessage = 'Hari ini tercatat Alfa. Yuk lebih disiplin besok.';
-            $clockColor = 'danger';
-
+            $clockEmoji = '⏰🥰';
+            $clockTitle = 'Ayo Presensi!';
+            $clockMessage = 'Jangan lupa melakukan presensi sebelum waktu ditutup.';
+            $clockColor = 'warning';
         } else {
 
-            $clockEmoji = '⏰🤗';
-            $clockTitle = 'Terima Kasih!';
-            $clockMessage = 'Terima kasih sudah melakukan presensi hari ini.';
-            $clockColor = 'success';
+            if ($todayAttendance) {
+
+                if ($todayAttendance->att_status == 4) {
+
+                    $clockEmoji = '⏰😠';
+                    $clockTitle = 'Kenapa Tidak Absen?';
+                    $clockMessage = 'Hari ini tercatat Alfa. Yuk lebih disiplin besok.';
+                    $clockColor = 'danger';
+                } else {
+
+                    $clockEmoji = '⏰🤗';
+                    $clockTitle = 'Terima Kasih!';
+                    $clockMessage = 'Terima kasih sudah melakukan presensi hari ini.';
+                    $clockColor = 'success';
+                }
+            } else {
+
+                $clockEmoji = '⏰😡';
+                $clockTitle = 'Belum Presensi!';
+                $clockMessage = 'Hari ini belum ada data presensi.';
+                $clockColor = 'danger';
+            }
         }
-
-    } else {
-
-        $clockEmoji = '⏰😡';
-        $clockTitle = 'Belum Presensi!';
-        $clockMessage = 'Hari ini belum ada data presensi.';
-        $clockColor = 'danger';
-    }
-}
 
         return view('student.dashboard', compact(
             'hadir',
@@ -125,13 +171,12 @@ if ($hour < 12) {
             'bg',
             'quote',
             'clockEmoji',
-'clockTitle',
-'clockMessage',
-'clockColor',
-'todayAttendance'
+            'clockTitle',
+            'clockMessage',
+            'clockColor',
+            'todayAttendance'
         ));
-
-}
+    }
 
     /**
      * Show the form for creating a new resource.
