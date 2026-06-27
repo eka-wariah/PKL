@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -55,41 +56,58 @@ class DashboardController extends Controller
      */
     public function studentAttendance($id)
     {
-
-    $student= Student::findOrFail($id); 
-        $academicYear = AcademicYear::where('acy_status', 1)->first();
-
-        $startDate = $academicYear->acy_year . '-06-01';
-        $endDate = Carbon::now()->toDateString();
-        $period = CarbonPeriod::create($startDate, $endDate);
-
-        $attendances = Attendance::where('att_std_id', $id)
-            ->whereBetween('att_date', [$startDate, $endDate])
-            ->orderBy('att_date')
-            ->get()
-            ->keyBy('att_date'); // key by att_date biar bisa di-lookup per tanggal
-
-        $report = [];
-        $no = 1;
-
-        foreach ($period as $date) {
-            $dateStr = $date->format('Y-m-d');
-            $attendance = $attendances->get($dateStr); // sekarang bisa lookup by tanggal
-
-            $report[] = [
-                'no'     => $no++,
-                'date'   => $date->format('d-m-Y'),
-                'status' => $attendance?->att_status ?? 4,
-                'time'   => $attendance?->att_time,
-                'photo'  => $attendance?->att_photo
-            ];
-        }
-        // dd($report);
-        $report = array_reverse($report);
-
-
+            $student = Student::findOrFail($id);
+            $academicYear = AcademicYear::where('acy_status', 1)->first();
+    
+            $startDate = $academicYear->acy_year . '-06-01';
+            $endDate = Carbon::now()->toDateString();
+            $period = CarbonPeriod::create($startDate, $endDate);
+    
+            $attendances = Attendance::where('att_std_id', $id)
+                ->whereBetween('att_date', [$startDate, $endDate])
+                ->orderBy('att_date')
+                ->get()
+                ->keyBy('att_date'); // key by att_date biar bisa di-lookup per tanggal
+    
+            $report = [];
+            $no = 1;
+    
+            foreach ($period as $date) {
+                $dateStr = $date->format('Y-m-d');
+                $attendance = $attendances->get($dateStr); // sekarang bisa lookup by tanggal
+    
+                $report[] = [
+                    'att_id' => $attendance?->att_id,
+                    'no'     => $no++,
+                    'date'   => $date->format('d-m-Y'),
+                    'status' => $attendance?->att_status ?? 4,
+                    'time'   => $attendance?->att_time,
+                    'photo'  => $attendance?->att_photo,
+                    'latitude'  => $attendance?->att_latitude,
+                    'longitude' => $attendance?->att_longitude,
+                    'address'   => $attendance?->att_address,
+                ];
+            }
+            // dd($report);
+            // dd($report);
+            $report = array_reverse($report);
         return view('comitte.attendance.index', compact('report','student'));
     }
+
+    public function downloadImage($id)
+{
+    // dd($id);
+    $attendance = Attendance::findOrFail($id);
+
+    if (!Storage::disk('public')->exists($attendance->att_photo)) {
+        abort(404, 'Foto tidak ditemukan.');
+    }
+
+    return Storage::disk('public')->download(
+        $attendance->att_photo,
+        basename($attendance->att_photo)
+    );
+}
 
     public function create()
     {

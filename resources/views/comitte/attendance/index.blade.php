@@ -2,6 +2,8 @@
 
 @push('link')
     <link rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 @endpush
 
 @section('title')
@@ -19,7 +21,7 @@
                         <h4 class="fw-semibold mb-8">Rekap Absensi Siswa</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/mentor/dashboard">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/comitte/dashboard">Dashboard</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Rekap Absensi</li>
                             </ol>
                         </nav>
@@ -148,13 +150,24 @@
                                     </td>
                                     <td>{{ $row['time'] ?? '—' }}</td>
                                     <td>
+
+
                                         @if ($row['status'] == 1)
                                             <button type="button" class="btn btn-sm btn-primary preview-image"
                                                 data-bs-toggle="modal" data-bs-target="#imageModal"
                                                 data-image="{{ Storage::url($row['photo']) }}"
-                                                data-download="/mentor/student-attendance/{{$row['photo']}}/download">
+                                                data-download="/comitte/student-attendance/{{ $row['att_id'] }}/download">
                                                 <i class="ti ti-photo"></i>
                                             </button>
+
+                                            @if ($row['latitude'] && $row['longitude'])
+                                                <button type="button" class="btn btn-sm btn-success preview-map"
+                                                    data-bs-toggle="modal" data-bs-target="#mapModal"
+                                                    data-lat="{{ $row['latitude'] }}" data-lng="{{ $row['longitude'] }}"
+                                                    data-address="{{ $row['address'] ?? '-' }}">
+                                                    <i class="ti ti-map-pin"></i>
+                                                </button>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -217,26 +230,92 @@
             </div>
         </div>
     </div>
+    {{-- modal map --}}
+    <div class="modal fade" id="mapModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti ti-map-pin me-1 text-success"></i> Lokasi Presensi
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    {{-- Info Alamat --}}
+                    <div class="px-3 py-2 bg-light border-bottom d-flex align-items-center gap-2">
+                        <i class="ti ti-home text-muted"></i>
+                        <small id="mapAddress" class="text-muted">-</small>
+                    </div>
+                    {{-- Map --}}
+                    <div id="mapContainer" style="height: 420px; width: 100%;"></div>
+                </div> 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <a href="#" id="btnGoogleMaps" target="_blank" class="btn btn-success">
+                        <i class="ti ti-brand-google-maps me-1"></i> Buka di Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('script')
     <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatable/datatable-advanced.init.js') }}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
         $('#table_absensi').DataTable({
             responsive: true,
             order: [],
         });
-    </script>
-    <script>
+
         $('.preview-image').click(function() {
-
-            let image = $(this).data('image');
+            let image    = $(this).data('image');
             let download = $(this).data('download');
-
             $('#previewImage').attr('src', image);
             $('#downloadBtn').attr('href', download);
+        });
 
+        // map
+        let mapLat = null;
+        let mapLng = null;
+        let mapInstance = null;
+
+        $(document).on('click', '.preview-map', function() {
+            mapLat = parseFloat($(this).data('lat'));
+            mapLng = parseFloat($(this).data('lng'));
+            const address = $(this).data('address');
+
+            $('#mapAddress').text(address);
+            $('#btnGoogleMaps').attr('href', `https://www.google.com/maps?q=${mapLat},${mapLng}`);
+        });
+
+        $('#mapModal').on('shown.bs.modal', function() {
+            if (mapInstance) {
+                mapInstance.remove();
+                mapInstance = null;
+            }
+
+            mapInstance = L.map('mapContainer').setView([mapLat, mapLng], 16);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(mapInstance);
+
+            L.marker([mapLat, mapLng])
+                .addTo(mapInstance)
+                .bindPopup(`<b>Lokasi Presensi</b><br>${$('#mapAddress').text()}`)
+                .openPopup();
+        });
+
+        $('#mapModal').on('hidden.bs.modal', function() {
+            if (mapInstance) {
+                mapInstance.remove();
+                mapInstance = null;
+            }
         });
     </script>
 @endpush

@@ -143,7 +143,8 @@ Route::middleware(['auth', 'role:comitte'])->group(function () {
         });
         Route::prefix('student-attendance')->name('studetnAttendance.')->group(function () {
             Route::get('/{id}', [DashboardController::class, 'studentAttendance'])->name('studentAttendance');
-            Route::get('/{photo}/download', [DashboardController::class, 'studentAttendance'])->name('studentAttendance');
+            // Route::get('/{photo}/download', [DashboardController::class, 'studentAttendance'])->name('studentAttendance');
+            Route::get('{id}/download/', [DashboardController::class, 'downloadImage'])->name('downlaod');
         });
     });
 
