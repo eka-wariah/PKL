@@ -53,12 +53,12 @@
                   <span class="d-none d-md-block">Bills</span>
                 </button>
               </li> --}}
-              <li class="nav-item" role="presentation">
+              {{-- <li class="nav-item" role="presentation">
                 <button class="nav-link position-relative rounded-0 d-flex align-items-center justify-content-center bg-transparent fs-3 py-3" id="pills-security-tab" data-bs-toggle="pill" data-bs-target="#pills-security" type="button" role="tab" aria-controls="pills-security" aria-selected="false">
                   <i class="ti ti-lock me-2 fs-6"></i>
                   <span class="d-none d-md-block">Security</span>
                 </button>
-              </li>
+              </li> --}}
             </ul>
             <div class="card-body">
               <div class="tab-content" id="pills-tabContent">
@@ -127,6 +127,12 @@
                                   <label for="exampleInputtext" class="form-label">NISN</label>
                               <div class="form-control bg-light">
                                 {{ $student->student->std_nisn}}
+                              </div>
+                                </div>
+                                <div class="mb-3">
+                                  <label for="exampleInputtext" class="form-label">Email</label>
+                              <div class="form-control bg-light">
+                                {{ $student->email}}
                               </div>
                                 </div>
                               </div>

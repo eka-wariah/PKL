@@ -119,6 +119,7 @@ class StudentController extends Controller
 
     $user->update([
         'name' => $request->name,
+        'email' => $request->email,
     ]);
 
     $user->student->update([
