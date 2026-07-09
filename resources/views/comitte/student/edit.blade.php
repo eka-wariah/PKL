@@ -84,6 +84,13 @@
                       onchange="this.setCustomValidity('')">
                               </div>
                                 </div>
+                                <div class="mb-3">
+                                  <label for="exampleInputtext" class="form-label">Email</label>
+                                  <div class="col-sm-12">
+                                    <input type="email" name="email" value="{{$student->email}}"  class="form-control" id="exampleInputText1" placeholder="Nama Jurusan" required oninvalid="this.setCustomValidity('Harus memakai @')" 
+                      onchange="this.setCustomValidity('')">
+                                  </div>
+                                </div>
                               </div>
                               <div class="col-lg-6">
                                 {{-- <div class="mb-3">
