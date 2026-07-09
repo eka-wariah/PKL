@@ -19,7 +19,7 @@ class AcademicYearController extends Controller
         $academic_year = AcademicYear::all();
         foreach ($academic_year  as $year) {
 
-            $start = Carbon::create($year->acy_year, 7, 1);
+            $start = Carbon::create($year->acy_year, 6, 1);
             $end   = Carbon::create($year->acy_year + 1, 6, 30);
     
             if ($now->between($start, $end)) {

@@ -14,7 +14,7 @@ class AcademicSeeder extends Seeder
     public function run(): void
     {
         $acy = AcademicYear::create([
-            'acy_year'     => '2025',
+            'acy_year'     => '2026',
             'acy_status'    => '1',
         ]);
     }

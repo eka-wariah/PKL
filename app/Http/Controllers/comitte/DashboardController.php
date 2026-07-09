@@ -20,7 +20,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $students = MentorAssignments::with('student.attendanceToday', 'student.company')->get() ->unique('mas_student_id');
+        $academicYear = AcademicYear::where('acy_status', 1)->first();
+        $students = MentorAssignments::with('student.attendanceToday', 'student.company') ->where('mas_academic_id', $academicYear?->acy_id)->get() ->unique('mas_student_id');
         // dd();
         $totalPerusahaan = $students
     ->pluck('student.std_company_id')
@@ -28,7 +29,7 @@ class DashboardController extends Controller
     ->unique()
     ->count();
     $totalGuru = User::role('mentor')->count();
-    $academicYear = AcademicYear::where('acy_status', 1)->first();
+    // $academicYear = AcademicYear::where('acy_status', 1)->first();
 
     $studentIds = MentorAssignments::where('mas_academic_id', $academicYear?->acy_id)
             ->pluck('mas_student_id')
