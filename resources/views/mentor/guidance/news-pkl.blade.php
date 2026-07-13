@@ -233,7 +233,7 @@
                 </td>
     
                 <td class="logo-right">
-                    <img src="{{ public_path('assets/images/logos/images-removebg-preview (1).png') }}" alt="Logo Sekolah">
+                    <img src="{{public_path('assets/images/logos/1.png') }}" alt="Logo Sekolah">
                 </td>
             </tr>
         </table>
