@@ -103,9 +103,17 @@
                       <span>
                         <i class="ti ti-calendar-user"></i>
                       </span>
-                      <span class="hide-menu">Presensi</span>
+                      <span class="hide-menu">Presensi Hadir</span>
                   </a>
               </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="/student/checkout/" aria-expanded="false">
+                    <span>
+                      <i class="ti ti-calendar-user"></i>
+                    </span>
+                    <span class="hide-menu">Presensi Pulang</span>
+                </a>
+            </li>
           </ul>
       </nav>
 

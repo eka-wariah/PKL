@@ -14,6 +14,7 @@ use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController
 use App\Http\Controllers\Mentor\GuidanceController;
 // use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Student\CheckOutController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Student\PresenceController;
 
@@ -237,6 +238,12 @@ Route::prefix('student')->name('student.')->group(function () {
         Route::post('/', [PresenceController::class,'store'])->name('store');
         Route::post('/permission', [PresenceController::class,'storePermission'])->name('permission.store');
         Route::post('/sick', [PresenceController::class,'storeSick'])->name('sick.store');
+    });
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('/', [CheckOutController::class,'index'])->name('index');
+        Route::post('/', [CheckOutController::class,'store'])->name('store');
+        Route::post('/permission', [CheckOutController::class,'storePermission'])->name('permission.store');
+        Route::post('/sick', [CheckOutController::class,'storeSick'])->name('sick.store');
     });
 
 });
