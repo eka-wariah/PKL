@@ -15,7 +15,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class StudentTemplateSheet implements WithHeadings, WithEvents,  WithStyles, WithColumnWidths
+class StudentTemplateSheet implements WithHeadings, WithEvents, WithStyles, WithColumnWidths
 {
     public function headings(): array
     {
@@ -30,6 +30,7 @@ class StudentTemplateSheet implements WithHeadings, WithEvents,  WithStyles, Wit
             'nickname',
         ];
     }
+
     // =========================
     // WIDTH COLUMN
     // =========================
@@ -110,9 +111,10 @@ class StudentTemplateSheet implements WithHeadings, WithEvents,  WithStyles, Wit
             'A106',
             '* Pastikan data Jurusan, Kelas, dan Perusahaan telah tersedia sebelum import dilakukan.'
         );
+
         $sheet->getStyle('D2:E1000')
-    ->getNumberFormat()
-    ->setFormatCode('@');
+            ->getNumberFormat()
+            ->setFormatCode('@');
 
         $sheet->getStyle('A106')->applyFromArray([
             'font' => [
@@ -132,25 +134,24 @@ class StudentTemplateSheet implements WithHeadings, WithEvents,  WithStyles, Wit
 
                 $sheet = $event->sheet->getDelegate();
 
-                // ambil data dropdown
-                $classes = Classes::pluck('cls_code')->toArray();
-                $companies = Company::pluck('cmp_name')->toArray();
+                $classCount   = Classes::count();
+                $companyCount = Company::count();
 
                 // =========================
                 // DROPDOWN KELAS
+                // referensi ke sheet 'classes', kolom A, mulai row 1
                 // =========================
                 for ($i = 2; $i <= 100; $i++) {
-
                     $validation = new DataValidation();
                     $validation->setType(DataValidation::TYPE_LIST);
                     $validation->setErrorStyle(DataValidation::STYLE_STOP);
-                    $validation->setAllowBlank(false);
+                    $validation->setAllowBlank(true);
                     $validation->setShowInputMessage(true);
                     $validation->setShowErrorMessage(true);
                     $validation->setShowDropDown(true);
 
                     $validation->setFormula1(
-                        '"' . implode(',', $classes) . '"'
+                        "classes!\$A\$1:\$A\$" . $classCount
                     );
 
                     $sheet->getCell("F$i")
@@ -159,19 +160,19 @@ class StudentTemplateSheet implements WithHeadings, WithEvents,  WithStyles, Wit
 
                 // =========================
                 // DROPDOWN PERUSAHAAN
+                // referensi ke sheet 'companies', kolom B (cmp_name), mulai row 1
                 // =========================
                 for ($i = 2; $i <= 100; $i++) {
-
                     $validation = new DataValidation();
                     $validation->setType(DataValidation::TYPE_LIST);
                     $validation->setErrorStyle(DataValidation::STYLE_STOP);
-                    $validation->setAllowBlank(false);
+                    $validation->setAllowBlank(true);
                     $validation->setShowInputMessage(true);
                     $validation->setShowErrorMessage(true);
                     $validation->setShowDropDown(true);
 
                     $validation->setFormula1(
-                        '"' . implode(',', $companies) . '"'
+                        "companies!\$B\$1:\$B\$" . $companyCount
                     );
 
                     $sheet->getCell("G$i")
@@ -180,5 +181,4 @@ class StudentTemplateSheet implements WithHeadings, WithEvents,  WithStyles, Wit
             },
         ];
     }
-    
 }
