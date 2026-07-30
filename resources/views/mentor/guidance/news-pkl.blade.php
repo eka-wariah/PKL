@@ -379,13 +379,13 @@ sebagaimana mestinya sebagai bukti otentik pelaksanaan supervisi dan bimbingan P
         <tr>
             <td>
                 <span class="name">
-                    ({{ auth()->user()->name }})
+                    Azhara Fatiya Silmi, S.Kom., Gr
                 </span>
             </td>
 
             <td>
                 <span class="name">
-                    ({{ $news->mentor->user->name ?? '-' }})
+                    {{ $news->mentor->user->name ?? '-' }}
                 </span>
             </td>
         </tr>
