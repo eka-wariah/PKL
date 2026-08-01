@@ -22,6 +22,10 @@ class StudentController extends Controller
      */
     public function index()
     {
+        
+        $title = 'Hapus Siswa!';
+        $text = "Apakah Anda yakin ingin menghapus?";
+        confirmDelete($title, $text);
         $student = User::role('student')->with('student')->get();
         return view('comitte.student.index', compact('student'));
     }
@@ -138,9 +142,15 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy( $id)
     {
-        //
+        // dd($id);
+        $student = User::findOrFail($id);
+        // dd($student);
+        $student->delete();
+        Alert::success('Berhasil Menghapus', 'Data siswa berhasil diHapus');
+        return redirect('/comitte/student');
+
     }
     public function importPage()
     {

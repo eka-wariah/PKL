@@ -51,9 +51,7 @@ class StudentImport implements ToCollection, WithHeadingRow
                 $user = User::create([
                     'name'     => $row['nama'],
                     'email'    => $row['email'],
-                    'password' => bcrypt(
-                        $row['password'] ?? 'password123'
-                    ),
+                    'password' => bcrypt(trim((string) ($row['password'] ?? 'password123'))),
                 ]);
     
                 $user->assignRole('student');
