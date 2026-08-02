@@ -59,7 +59,7 @@ class DashboardController extends Controller
             $student = Student::findOrFail($id);
             $academicYear = AcademicYear::where('acy_status', 1)->first();
     
-            $startDate = $academicYear->acy_year . '-08-01';
+            $startDate = $academicYear->acy_year . '-08-03';
             $endDate = Carbon::now()->toDateString();
             $period = CarbonPeriod::create($startDate, $endDate);
             // dd($period);
@@ -84,9 +84,14 @@ class DashboardController extends Controller
                     'status' => $attendance?->att_status ?? 4,
                     'time'   => $attendance?->att_time,
                     'photo'  => $attendance?->att_photo,
+                    'checkout_time'   => $attendance?->att_checkout_time,
+                    'checkout_photo'  => $attendance?->att_checkout_photo,
                     'latitude'  => $attendance?->att_latitude,
                     'longitude' => $attendance?->att_longitude,
                     'address'   => $attendance?->att_address,
+                    'checkout_latitude'  => $attendance?->att_checkout_latitude,
+                    'checkout_longitude' => $attendance?->att_checkout_longitude,
+                    'checkout_address'   => $attendance?->att_checkout_address
                 ];
             }
             // dd($report);

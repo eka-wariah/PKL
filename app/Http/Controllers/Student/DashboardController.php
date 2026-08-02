@@ -8,6 +8,8 @@ use App\Models\Attendance;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 
 
@@ -20,7 +22,7 @@ class DashboardController extends Controller
     {
         $student = auth()->user()->student;
         $academicYear = AcademicYear::where('acy_status', 1)->first();
-        $startDate = $academicYear->acy_year . '-08-01';
+        $startDate = $academicYear->acy_year . '-08-03';
         $endDate = Carbon::now()->toDateString();
         $period = CarbonPeriod::create($startDate, $endDate);
 
@@ -178,51 +180,36 @@ class DashboardController extends Controller
         ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function editPassword()
+{
+    return view('student.edit-password');
+}
+
+public function updatePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:8|confirmed',
+    ], [
+        'current_password.required' => 'Password saat ini wajib diisi.',
+        'new_password.required' => 'Password baru wajib diisi.',
+        'new_password.min' => 'Password baru minimal 8 karakter.',
+        'new_password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+    ]);
+
+    $student = Auth::user();
+    // dd($request->current_password);
+    if (!Hash::check($request->current_password, $student->password)) {
+        return back()->withErrors([
+            'current_password' => 'Password saat ini salah.',
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    $student->update([
+        'password' => Hash::make($request->new_password),
+    ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    return back()->with('success', 'Password berhasil diubah.');
+}
+   
 }

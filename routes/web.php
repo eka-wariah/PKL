@@ -233,6 +233,9 @@ Route::middleware(['auth', 'role:mentor'])->group(function () {
 });
 Route::prefix('student')->name('student.')->group(function () {
     Route::get('/', [StudentDashboardController::class, 'index'])->name('index');
+    Route::get('/edit-password', [StudentDashboardController::class, 'editPassword'])->name('editPassword');
+    Route::put('/edit-password', [StudentDashboardController::class, 'updatePassword'])->name('update-password');
+
     Route::prefix('presence')->name('presence.')->group(function () {
         Route::get('/', [PresenceController::class,'index'])->name('index');
         Route::post('/', [PresenceController::class,'store'])->name('store');

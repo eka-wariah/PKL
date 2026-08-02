@@ -123,6 +123,7 @@
                                 <th>Hari</th>
                                 <th>Status</th>
                                 <th>Waktu Masuk</th>
+                                <th>Waktu Pulang</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -149,6 +150,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $row['time'] ?? '—' }}</td>
+                                    <td>{{ $row['checkout_time'] ?? '—' }}</td>
                                     <td>
 
 
@@ -172,9 +174,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted py-3">Belum ada data absensi</td>
-                                </tr>
+                                
                             @endforelse
                         </tbody>
                         <tfoot>
@@ -184,6 +184,7 @@
                                 <th>Hari</th>
                                 <th>Status</th>
                                 <th>Waktu Masuk</th>
+                                <th>Waktu Pulang</th>
                                 <th>Aksi</th>
                             </tr>
                         </tfoot>
