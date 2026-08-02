@@ -21,7 +21,7 @@ class PresenceController extends Controller
             ->whereDate('att_date', $today)
             ->first();
         $canPresence = now()->format('H:i') >= '06:00'
-            && now()->format('H:i') < '14:00';
+            && now()->format('H:i') < '23:00';
         return view('student.presence.index', [
             'student'      => $student,
             'already'      => (bool) $presenceData,
@@ -36,10 +36,10 @@ class PresenceController extends Controller
 
         $currentTime = now()->format('H:i');
 
-        if ($currentTime < '06:00' || $currentTime >= '14:00') {
+        if ($currentTime < '06:00' || $currentTime >= '23:00') {
             return response()->json([
                 'success' => false,
-                'message' => 'Presensi hanya dapat dilakukan pukul 06:00 - 12:00.'
+                'message' => 'Presensi hanya dapat dilakukan pukul 06:00 - 23:00.'
             ]);
         }
 

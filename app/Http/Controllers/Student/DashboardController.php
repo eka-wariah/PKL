@@ -20,7 +20,7 @@ class DashboardController extends Controller
     {
         $student = auth()->user()->student;
         $academicYear = AcademicYear::where('acy_status', 1)->first();
-        $startDate = $academicYear->acy_year . '-06-01';
+        $startDate = $academicYear->acy_year . '-08-01';
         $endDate = Carbon::now()->toDateString();
         $period = CarbonPeriod::create($startDate, $endDate);
 

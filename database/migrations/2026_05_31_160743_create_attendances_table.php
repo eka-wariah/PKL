@@ -22,13 +22,7 @@ return new class extends Migration
             $table->decimal('att_longitude', 11, 8)->nullable();
             $table->string('att_address')->nullable();
             $table->time('att_time')->nullable();
-            $table->string('att_checkout_photo')->nullable();
-            $table->decimal('att_checkout_latitude', 10, 8)->nullable();
-            $table->decimal('att_checkout_longitude', 11, 8)->nullable();
-            $table->string('att_checkout_address')->nullable();
-            $table->time('att_checkout_time')->nullable();
             $table->enum('att_type', ['masuk', 'pulang'])->default('masuk');
-            $table->enum('att_type_checkout', ['masuk', 'pulang'])->default('pulang')->nullable();
             $table->unsignedBigInteger('att_created_by')->nullable();
             $table->unsignedBigInteger('att_updated_by')->nullable();
             $table->timestamps();

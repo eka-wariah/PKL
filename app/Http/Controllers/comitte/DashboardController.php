@@ -5,6 +5,7 @@ namespace App\Http\Controllers\comitte;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\Attendance;
+use App\Models\Company;
 use App\Models\MentorAssignments;
 use App\Models\Student;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
 
 class DashboardController extends Controller
 {
@@ -23,11 +25,8 @@ class DashboardController extends Controller
         $academicYear = AcademicYear::where('acy_status', 1)->first();
         $students = MentorAssignments::with('student.attendanceToday', 'student.company') ->where('mas_academic_id', $academicYear?->acy_id)->get() ->unique('mas_student_id');
         // dd();
-        $totalPerusahaan = $students
-    ->pluck('student.std_company_id')
-    ->filter()
-    ->unique()
-    ->count();
+        $totalPerusahaan = Company::count();
+    // dd($totalPerusahaan);
     $totalGuru = User::role('mentor')->count();
     // $academicYear = AcademicYear::where('acy_status', 1)->first();
 
@@ -60,9 +59,10 @@ class DashboardController extends Controller
             $student = Student::findOrFail($id);
             $academicYear = AcademicYear::where('acy_status', 1)->first();
     
-            $startDate = $academicYear->acy_year . '-06-01';
+            $startDate = $academicYear->acy_year . '-08-01';
             $endDate = Carbon::now()->toDateString();
             $period = CarbonPeriod::create($startDate, $endDate);
+            // dd($period);
     
             $attendances = Attendance::where('att_std_id', $id)
                 ->whereBetween('att_date', [$startDate, $endDate])
